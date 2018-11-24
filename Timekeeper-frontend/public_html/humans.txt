@@ -1,0 +1,17 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    <name> -- <role> -- <twitter>
+
+# THANKS
+
+    Fahmei Tahiri -- backend & frontend developer
+    Steven Mollie -- backend developer
+    Glenn Degrendele -- frontend developer
+
+# TECHNOLOGY COLOPHON
+    Java, Spring framework
+    CSS3, HTML5
+    Apache Server Configs, jQuery, Modernizr, Normalize.css

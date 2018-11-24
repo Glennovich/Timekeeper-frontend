@@ -1,0 +1,8 @@
+{
+    "name": "Timekeeper-frontend",
+    "version": "1.0.0",
+    "keywords": ["util", "functional", "server", "client", "browser"],
+    "author": "gdegr_000",
+    "contributors": [],
+    "dependencies": {}
+}
