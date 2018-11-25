@@ -28,30 +28,61 @@
 
 <body>
     <div class="container">
-        <table id="tblProjects">
-            <thead>
-                <tr>
-                    <th>
-                        Name
-                    </th>
-                    <th>
-                        Description
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="row">
+            <div class="col s1">
+                <h4>Projects</h4>
+            </div>
+            <div class="col s2">
+                <button style="margin-top: 27px; margin-left:30px;" data-target="addProjectModal" class="btn modal-trigger"
+                    id="addProjectModalTrigger">Add project</button>
+            </div>
+        </div>
+        <div class="row">
+            <table id="tblProjects">
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
 
-        <form id="addProject">  
-            <label for="projectName">Name: </label>
-            <input type="text" name="name" id="projectName"><br>
-            <label for="description">Description: </label>
-            <input type="text" name="description" id="description">
-            <input class="btn waves-effect waves-light" type="button" id="saveProject" value="Save project">
-        </form>
+        <!--Modal to add a project-->
+        <div id="addProjectModal" class="modal">
+            <div class="modal-content">
+                <div class="row">
+                    <span id="projectAddFailedMessage" style="display: none;" class="red-text">Project could not be added, please try again!</span>
+                </div>
+                <form id="formAddProject">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <label for="projectName">Name: </label>
+                            <input type="text" name="projectName" id="projectName">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <label for="projectDescription">Description: </label>
+                            <input type="text" name="projectDescription" id="projectDescription">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a class="modal-close waves-effect waves-green btn-flat">Cancel</a>
+                <a id="saveProject" class="waves-effect waves-green btn-flat">Save</a>
+            </div>
+        </div>
     </div>
+    <div id="snackbar">Project created!</div>
 </body>
 
 </html>
