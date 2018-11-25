@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Timekeeper</title>
+    <title>Timekeeper - Tasks</title>
     <meta name="description" content="Timekeeper. A simple time tracking tool that helps you track time on your projects. Once you start using it, you'll realize that this tool is a keeper, a timekeeper.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="google" value="notranslate">
@@ -27,28 +27,31 @@
 
 <body>
     <div class="container">
-        <table id="tblProjects">
-            <thead>
-                <tr>
-                    <th>
-                        Name
-                    </th>
-                    <th>
-                        Description
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-
-            </tbody>
-        </table>
-
-        <form id="addProject">  
-            <label for="projectName">Name: </label>
-            <input type="text" name="name" id="projectName"><br>
-            <label for="description">Description: </label>
-            <input type="text" name="description" id="description">
-            <input class="btn waves-effect waves-light" type="button" id="saveProject" value="Save project">
+        <form id="frmTask">
+            <div class="row">
+                <div class="input-field col s12">
+                    <select id="taskProjectId" name="taskProjectId"></select>
+                    <label for="taskProjectId">Project: </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input type="text" id="taskName" name="taskName" placeholder="name of the task">
+                    <label for="taskName">Task: </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input type="text" id="taskDescription" name="taskDescription" placeholder="description for the task">
+                    <label for="taskDescription">Description: </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s4">
+                    <input class="btn waves-effect waves-light" type="button" id="saveTask" value="Save task">
+                </div>
+                <div id="taskFeedback" class="col s4 scale-transition scale-out"></div>
+            </div>
         </form>
     </div>
 </body>
