@@ -238,3 +238,12 @@ textarea {
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
 }
+
+/*
+* font
+*/
+
+@font-face{
+    font-family: 'digital-clock-font';
+    src: url(../fonts/digital-7.ttf);
+}

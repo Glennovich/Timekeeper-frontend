@@ -6,6 +6,27 @@ $(document).ready(function () {
 
     //event listeners
     $("#saveProject").on("click", function () {
+        saveProjectToServer();
+    });
+
+    $("#addProjectModalTrigger").on("click", function () {
+        $("#addProjectModal").modal();
+        //focus on input field name and remove invalid class if neede
+        $("#projectName").val("").removeClass("invalid");
+        setTimeout(() => {
+            $("#projectName").focus();
+        }, 3);
+    })
+
+    $("input").keyup(function (e) {
+        if (e.keyCode == 13) {
+            saveProjectToServer();
+        }
+    })
+});
+
+function saveProjectToServer() {
+    if ($("#projectName").val() != "") {
         var formData = {
             "name": $("#projectName").val(),
             "description": $("#projectDescription").val()
@@ -18,15 +39,11 @@ $(document).ready(function () {
             url: backendBaseUrl + httpRequestParamaters.backendUrlProjects,
             data: formData,
             contentType: "application/json; charset=utf-8",
-            success: projectSaveSuccess,
+            success: projectSaveSuccess(formData),
             error: projectSaveError
         });
-    });
-
-    $("#addProjectModalTrigger").on("click", function(){
-        $("#addProjectModal").modal();
-    })
-});
+    }
+}
 
 function getProjects(cb) {
     $.get(backendBaseUrl + httpRequestParamaters.backendUrlProjects, function (data) {
@@ -40,15 +57,21 @@ function displayProjects(data) {
     });
 }
 
-function projectSaveSuccess(data, textStatus, jqXHR){
+function projectSaveSuccess(data, textStatus, jqXHR) {
+    $("input").val("");
     $('#addProjectModal').modal('close');
-    $("#snackbar").addClass("show");
 
+    //show a snackbar to let the user know that the project is created successfully
+    $("#snackbar").addClass("show");
     setTimeout(() => {
         $("#snackbar").removeClass("show");
     }, 3000);
+
+    //add created project to the table
+    data = JSON.parse(data);
+    $("#tblProjects tbody").append("<tr><td>" + data.name + "</td><td>" + data.description + "</td></tr>");
 }
 
-function projectSaveError(jqXHR, textStatus, errorThrown){
+function projectSaveError(jqXHR, textStatus, errorThrown) {
     $("#projectAddFailedMessage").show();
 }
