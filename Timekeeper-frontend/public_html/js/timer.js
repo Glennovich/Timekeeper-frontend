@@ -1,7 +1,15 @@
+var t;
 var seconds = 0, minutes = 0, hours = 0;
 
 $(document).ready(function(){
-    setTimeout(timer, 1000);
+    //event listeners
+    $("#startTimer").on("click", function(){
+        t = setTimeout(timer, 1000);
+    });
+
+    $("#stopTimer").on("click", function(){
+        clearTimeout(t);
+    })
 });
 
 function timer() {
@@ -17,7 +25,7 @@ function timer() {
     
     $("#timer").text(formatTimer(hours, minutes, seconds));
 
-    setTimeout(timer, 1000);
+    t = setTimeout(timer, 1000);
 }
 
 function formatTimer(hours, minutes, seconds){
