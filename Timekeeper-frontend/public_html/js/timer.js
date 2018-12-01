@@ -9,7 +9,7 @@ $(document).ready(function(){
 
     $("#stopTimer").on("click", function(){
         clearTimeout(t);
-    })
+    });
 });
 
 function timer() {
