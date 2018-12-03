@@ -67,9 +67,12 @@ function projectSaveSuccess(data, textStatus, jqXHR) {
         $("#snackbar").removeClass("show");
     }, 3000);
 
-    //add created project to the table
-    data = JSON.parse(data);
-    $("#tblProjects tbody").append("<tr><td>" + data.name + "</td><td>" + data.description + "</td></tr>");
+    //clear table
+    setTimeout(() => {
+        //clear table
+        $("#tblProjects tbody tr").remove();
+        getProjects(displayProjects);
+    }, 100);
 }
 
 function projectSaveError(jqXHR, textStatus, errorThrown) {

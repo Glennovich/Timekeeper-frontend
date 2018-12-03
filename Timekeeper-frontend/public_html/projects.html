@@ -27,6 +27,24 @@
 </head>
 
 <body>
+    <nav style="background-color: #26a69a;">
+        <div class="nav-wrapper">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="left hide-on-med-and-down">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="tasks.html">Tasks</a></li>
+                <li><a href="livetester.html">Livetester</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <ul class="sidenav" id="mobile-demo">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="tasks.html">Tasks</a></li>
+        <li><a href="livetester.html">Livetester</a></li>
+    </ul>
     <div class="container">
         <div class="row">
             <div class="col s1">
@@ -59,13 +77,15 @@
         <div id="addProjectModal" class="modal">
             <div class="modal-content">
                 <div class="row">
-                    <span id="projectAddFailedMessage" style="display: none;" class="red-text">Project could not be added, please try again!</span>
+                    <span id="projectAddFailedMessage" style="display: none;" class="red-text">Project could not be
+                        added, please try again!</span>
                 </div>
                 <form id="formAddProject">
                     <div class="row">
                         <div class="input-field col s12">
                             <label for="projectName">Name: </label>
-                            <input type="text" name="projectName" id="projectName" class="validate" required aria-required="true">
+                            <input type="text" name="projectName" id="projectName" class="validate" required
+                                aria-required="true">
                             <span class="helper-text" data-error="Name is required"></span>
                         </div>
                     </div>

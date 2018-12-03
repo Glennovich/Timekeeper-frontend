@@ -9,7 +9,16 @@ $(document).ready(function(){
 
     $("#stopTimer").on("click", function(){
         clearTimeout(t);
-    })
+    });
+
+    //set the timer back to 00:00:00
+    $("#resetTimer").on("click", function(){
+        clearTimeout(t);
+        seconds = 0;
+        minutes = 0;
+        hours = 0;
+        $("#timer").text("00:00:00");
+    });
 });
 
 function timer() {

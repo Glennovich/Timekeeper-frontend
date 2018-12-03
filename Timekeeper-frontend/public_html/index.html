@@ -1,49 +1,67 @@
 <!doctype html>
 <html class="no-js" lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Timekeeper</title>
-        <meta name="description" content="Timekeeper. A simple time tracking tool that helps you track time on your projects. Once you start using it, you'll realize that this tool is a keeper, a timekeeper.">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="google" value="notranslate">
-        <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW"><!-- TODO: remove when going live -->
-        
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
-        <!-- TODO: Place favicon.ico in the root directory -->
 
-        <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" href="css/timekeeper.css">
-        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
-    </head>
-    <body>
-        <!--[if lt IE 8]>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Timekeeper</title>
+    <meta name="description" content="Timekeeper. A simple time tracking tool that helps you track time on your projects. Once you start using it, you'll realize that this tool is a keeper, a timekeeper.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google" value="notranslate">
+    <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW"><!-- TODO: remove when going live -->
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <!-- TODO: Place favicon.ico in the root directory -->
+
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/timekeeper.css">
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+</head>
+
+<body>
+    <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <!-- Content zone -->
-        <p>Welcome to the Timekeeper base page. We've already got some stuff to test:</p>
-        <p>Test <a href="projects.html" title="Let's do some testing with projects shall we?">adding projects</a></p>
-        <p>Test <a href="tasks.html" title="Let's do some testing with tasks shall we?">adding tasks</a></p>
-        <p>Test <a href="livetester.html" title="REST calls, darling! REST calls for everyone!!!">REST calls every minute</a></p>
-
-        <div class="container">
-            <span id="timer" style="font-family: 'digital-clock-font'; font-size: 100px;">00:00:00</span>
-
-            <button id="startTimer">Start timer</button>
-            <button id="stopTimer">Stop timer</button>
+    <!-- Content zone -->
+    <!--navigation-->
+    <nav style="background-color: #26a69a;">
+        <div class="nav-wrapper">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="left hide-on-med-and-down">
+                <li><a href="index.htm">Home</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="tasks.html">Tasks</a></li>
+                <li><a href="livetester.html">Livetester</a></li>
+            </ul>
         </div>
+    </nav>
 
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
-        <script src="js/plugins.js"></script>
-        <script src="js/config.js"></script>
-        <script src="js/main.js"></script>
-        <script src="js/timer.js"></script>
+    <ul class="sidenav" id="mobile-demo">
+        <li><a href="index.htm">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="tasks.html">Tasks</a></li>
+        <li><a href="livetester.html">Livetester</a></li>
+    </ul>
+    <div class="container">
+        <div id="timerWrapper" style="text-align: center;">
+            <span id="timer" style="font-family: 'digital-clock-font'; font-size: 100px;">00:00:00</span><br>
+            <button class="btn" id="startTimer">Start timer</button>
+            <button class="btn" id="stopTimer">Stop timer</button>
+            <button class="btn" id="resetTimer">Reset timer</button>
+        </div>
+    </div>
 
-        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-        <!-- GDG20181124: not sure if we will be using this, so I commented it
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
+    <script src="js/plugins.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/timer.js"></script>
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+    <!-- GDG20181124: not sure if we will be using this, so I commented it
         <script>
             (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
             function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
@@ -53,5 +71,6 @@
             ga('create','UA-XXXXX-X','auto');ga('send','pageview');
         </script>
         -->
-    </body>
+</body>
+
 </html>
