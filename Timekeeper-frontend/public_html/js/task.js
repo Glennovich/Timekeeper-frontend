@@ -36,6 +36,9 @@ $(document).ready(function(){
     });
     
     $("#taskProjectId").on("change", function(){
+        //save current projectId
+        timekeeperStorage.setItem("taskProjectId",$("#taskProjectId").val());
+        
         getTasksForProject($("#taskProjectId").val(), displayTasks);
         //fill in project name in taskProject input field in modal form
         $("#taskProject").val($("#taskProjectId option:selected").text());
@@ -45,12 +48,18 @@ $(document).ready(function(){
 function getProjectsAsOptions(selectelement){
     $.get(backendBaseUrl + httpRequestParamaters.backendUrlProjects, function (data) {
         $.each(data, function (id, project) {
-            $(selectelement).append("<option value=\"" + project.id + "\">" + project.name + "</option>");
+            $(selectelement).append(new Option(project.name, project.id));
         });
-        $(selectelement).formSelect();//must be done after dynamically adding option elements or lay-out will suck
+        
+        //change selected project if there is an item in local storage
+        if(timekeeperStorage.getItem("taskProjectId")){
+            $(selectelement).val(timekeeperStorage.getItem("taskProjectId"));
+        }
+        
+        $(selectelement).formSelect();//must be done after dynamically adding option elements/changing the selected value or lay-out will suck
         
         //initialize list of tasks for the currently selected (first) project of the list
-        getTasksForProject($("#taskProjectId").val(), displayTasks);
+        getTasksForProject($(selectelement).val(), displayTasks);
     }).fail(function(){
         //getting projects failed: disable add button
         $("#addTaskModalTrigger").addClass("disabled");
@@ -69,6 +78,10 @@ function displayTasks(data) {
     $.each(data, function (id, task) {
         $("#tblTasks tbody").append("<tr><td>" + task.name + "</td><td>" + task.description + "</td></tr>");
     });
+    //add message to show when there are no projects
+    if($("#tblTasks tbody tr").length == 0){
+        $("#tblTasks tbody").append("<tr><td>No tasks found for this project</td><td></td></tr>");
+    }
 }
 function clearTaskList(){
     $("#tblTasks tbody tr").remove();
