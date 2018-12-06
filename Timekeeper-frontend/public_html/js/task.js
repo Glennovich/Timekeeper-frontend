@@ -28,8 +28,9 @@ $(document).ready(function(){
         }, 3);
     });
 
-    $("#formAddTask input,#formAddTask textarea").keyup(function (e) {
+    $("#formAddTask input,#formAddTask textarea").keydown(function (e) {
         if (e.keyCode == 13) {
+            e.preventDefault();//intercept the enter
             saveTask();
         }
     });
