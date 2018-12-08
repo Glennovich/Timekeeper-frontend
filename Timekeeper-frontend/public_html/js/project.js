@@ -13,6 +13,7 @@ $(document).ready(function () {
         $("#addProjectModal").modal();
         //focus on input field name and remove invalid class if neede
         $("#projectName").val("").removeClass("invalid");
+        $("#projectDescription").val("");
         setTimeout(() => {
             $("#projectName").focus();
         }, 3);
@@ -26,6 +27,9 @@ $(document).ready(function () {
 });
 
 function saveProjectToServer() {
+    if($("#projectName").val().replace(/ /g,'') == ""){
+        $("#projectName").val("");
+    }
     if ($("#projectName").val() != "") {
         var formData = {
             "name": $("#projectName").val(),
@@ -33,7 +37,7 @@ function saveProjectToServer() {
         };
 
         formData = JSON.stringify(formData);
-
+       
         $.ajax({
             type: "POST",
             url: backendBaseUrl + httpRequestParamaters.backendUrlProjects,
