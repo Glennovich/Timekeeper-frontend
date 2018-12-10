@@ -11,33 +11,49 @@ $(document).ready(function () {
 
     $("#addProjectModalTrigger").on("click", function () {
         $("#addProjectModal").modal();
-        //focus on input field name and remove invalid class if neede
-        $("#projectName").val("").removeClass("invalid");
-        $("#projectDescription").val("");
+        $(".datepicker").datepicker({
+            format: 'yyyy-mm-dd'
+        });
+
+        //clear the form fields
+        clearForm();
+
         setTimeout(() => {
             $("#projectName").focus();
         }, 3);
-    })
+    });
 
     $("input").keyup(function (e) {
         if (e.keyCode == 13) {
             saveProjectToServer();
         }
-    })
+    });
+
+    $("#projectDueDate").on("focus", function(){
+        $("#projectDueDate").click();
+    });
 });
 
+function clearForm() {
+    //focus on input field name and remove invalid class if neede
+    $("#projectName").val("").removeClass("invalid");
+    $("#projectDescription").val("");
+    $("#projectDueDate").val("");
+}
+
 function saveProjectToServer() {
-    if($("#projectName").val().replace(/ /g,'') == ""){
+    if ($("#projectName").val().replace(/ /g, '') == "") {
         $("#projectName").val("");
     }
     if ($("#projectName").val() != "") {
         var formData = {
             "name": $("#projectName").val(),
-            "description": $("#projectDescription").val()
+            "description": $("#projectDescription").val(),
+            "deadLine": $("#projectDueDate").val()
         };
 
         formData = JSON.stringify(formData);
-       
+
         $.ajax({
             type: "POST",
             url: backendBaseUrl + httpRequestParamaters.backendUrlProjects,
@@ -57,7 +73,14 @@ function getProjects(cb) {
 
 function displayProjects(data) {
     $.each(data, function (id, project) {
-        $("#tblProjects tbody").append("<tr><td>" + project.name + "</td><td>" + project.description + "</td></tr>");
+        if(project.deadLine == undefined){
+            project.deadLine = "";
+        }
+        if(project.status == undefined){
+            project.status = "";
+        }
+        
+        $("#tblProjects tbody").append("<tr><td>" + project.name + "</td><td>" + project.description + "</td>" + "<td>" + project.status + "</td>" + "<td>" + project.deadLine + "</td></tr>");
     });
 }
 

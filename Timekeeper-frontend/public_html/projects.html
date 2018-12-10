@@ -65,6 +65,12 @@
                         <th>
                             Description
                         </th>
+                        <th>
+                            Status
+                        </th>
+                        <th>
+                            Deadline
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -84,7 +90,7 @@
                     <div class="row">
                         <div class="input-field col s12">
                             <label for="projectName">Name: </label>
-                            <input type="text" name="projectName" id="projectName" class="validate" required
+                            <input type="text" name="projectName" id="projectName" class="validate" required=""
                                 aria-required="true">
                             <span class="helper-text" data-error="Name is required"></span>
                         </div>
@@ -93,6 +99,12 @@
                         <div class="input-field col s12">
                             <label for="projectDescription">Description: </label>
                             <input type="text" name="projectDescription" id="projectDescription">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <label for="projectDueDate">Deadline: </label>
+                            <input type="text" class="datepicker validate" readonly id="projectDueDate">
                         </div>
                     </div>
                 </form>
