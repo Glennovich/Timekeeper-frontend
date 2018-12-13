@@ -71,6 +71,9 @@
                         <th>
                             Deadline
                         </th>
+                        <th>
+
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -115,7 +118,19 @@
             </div>
         </div>
     </div>
-    <div id="snackbar">Project created!</div>
+
+    <!--Modal to confirm delete of a project-->
+    <div id="deleteProjectModal" class="modal">
+            <div class="modal-content">
+                ARE YOU SURE YOU WANT TO DELETE THIS PROJECT?
+            </div>
+            <div class="modal-footer">
+                <a class="modal-close waves-effect waves-green btn-flat">NO</a>
+                <button id="deleteProject" class="waves-effect waves-green btn-flat" type="submit">YES</button>
+            </div>
+        </div>
+    </div>
+    <div id="snackbar"></div>
 </body>
 
 </html>

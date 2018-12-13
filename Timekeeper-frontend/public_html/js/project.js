@@ -4,6 +4,9 @@ $(document).ready(function () {
         getProjects(displayProjects);
     }
 
+    //init all modal
+    $(".modal").modal();
+
     //event listeners
     $("#saveProject").on("click", function () {
         saveProjectToServer();
@@ -29,7 +32,7 @@ $(document).ready(function () {
         }
     });
 
-    $("#projectDueDate").on("focus", function(){
+    $("#projectDueDate").on("focus", function () {
         $("#projectDueDate").click();
     });
 });
@@ -73,35 +76,64 @@ function getProjects(cb) {
 
 function displayProjects(data) {
     $.each(data, function (id, project) {
-        if(project.deadLine == undefined){
+        if (project.deadLine == undefined) {
             project.deadLine = "";
         }
-        if(project.status == undefined){
+        if (project.status == undefined) {
             project.status = "";
         }
-        
-        $("#tblProjects tbody").append("<tr><td>" + project.name + "</td><td>" + project.description + "</td>" + "<td>" + project.status + "</td>" + "<td>" + project.deadLine + "</td></tr>");
+
+        $("#tblProjects tbody").append("<tr><td style='display:none;'>" + project.id + "</td><td>" + project.name + "</td><td>" + project.description + "</td>" + "<td>" + project.status + "</td>" + "<td>" + project.deadLine + "</td><td><a href='#' onclick='confirmDelete(\"" + project.id + "\")'><img src='./assets/img/icon/delete.svg'/></a></td></tr>");
     });
 }
 
 function projectSaveSuccess(data, textStatus, jqXHR) {
     $("input").val("");
     $('#addProjectModal').modal('close');
+    showSnackbar("Project created!");
+    refreshProjects();
+}
 
-    //show a snackbar to let the user know that the project is created successfully
-    $("#snackbar").addClass("show");
-    setTimeout(() => {
-        $("#snackbar").removeClass("show");
-    }, 3000);
-
+function refreshProjects() {
     //clear table
     setTimeout(() => {
         //clear table
         $("#tblProjects tbody tr").remove();
         getProjects(displayProjects);
-    }, 100);
+    }, 300);
 }
 
 function projectSaveError(jqXHR, textStatus, errorThrown) {
     $("#projectAddFailedMessage").show();
+}
+
+function deleteProject(projectId) {
+    $.ajax({
+        type: "DELETE",
+        url: backendBaseUrl + httpRequestParamaters.backendUrlProjects + "/" + projectId,
+        success: projectDeleteSucces()
+    });
+}
+
+function projectDeleteSucces(){
+    $("#deleteProjectModal").modal("close");
+    showSnackbar("Project deleted!");
+    refreshProjects();
+}
+
+function confirmDelete(projectId){
+    $("#deleteProjectModal").modal("open");
+
+    $("#deleteProject").on("click", function(){
+        deleteProject(projectId);
+    })
+}
+
+function showSnackbar(message){
+        //show a snackbar to let the user know that the project is created successfully
+        $("#snackbar").text(message);
+        $("#snackbar").addClass("show");
+        setTimeout(() => {
+            $("#snackbar").removeClass("show");
+        }, 3000);
 }
