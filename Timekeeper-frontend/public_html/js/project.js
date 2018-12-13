@@ -95,7 +95,6 @@ function projectSaveSuccess(data, textStatus, jqXHR) {
 }
 
 function refreshProjects() {
-    //clear table
     setTimeout(() => {
         //clear table
         $("#tblProjects tbody tr").remove();
