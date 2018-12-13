@@ -50,10 +50,18 @@ function getProjectsAsOptions(selectelement){
         $.each(data, function (id, project) {
             $(selectelement).append(new Option(project.name, project.id));
         });
+
+        //if no projects found, disable add button, else select first option default
+        if($(selectelement.selector + " option").length == 0){
+            $("#addTaskModalTrigger").addClass("disabled");
+        }
         
-        //change selected project if there is an item in local storage
+        //change selected project if there is an item in local storage & if this project still exists in the list!
         if(timekeeperStorage.getItem("taskProjectId")){
-            $(selectelement).val(timekeeperStorage.getItem("taskProjectId"));
+            var selectedTaskProjectId = timekeeperStorage.getItem("taskProjectId");
+            if($(selectelement.selector + " option[value='" + selectedTaskProjectId + "']").length != 0){
+                $(selectelement).val(selectedTaskProjectId);
+            }
         }
         
         $(selectelement).formSelect();//must be done after dynamically adding option elements/changing the selected value or lay-out will suck
