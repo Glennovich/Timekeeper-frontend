@@ -75,6 +75,8 @@ function saveProjectToServer() {
 function getProjects(cb) {
     $.get(backendBaseUrl + httpRequestParamaters.backendUrlProjects, function (data) {
         cb(data);
+    }).fail(function(){
+        $("#addProjectModalTrigger").addClass("disabled");
     });
 }
 
