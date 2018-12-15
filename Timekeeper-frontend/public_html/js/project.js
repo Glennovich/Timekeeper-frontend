@@ -35,6 +35,10 @@ $(document).ready(function () {
     $("#projectDueDate").on("focus", function () {
         $("#projectDueDate").click();
     });
+
+    $(".clickable-row").on("click", function(){
+        console.log("test");
+    })
 });
 
 function clearForm() {
@@ -62,7 +66,7 @@ function saveProjectToServer() {
             url: backendBaseUrl + httpRequestParamaters.backendUrlProjects,
             data: formData,
             contentType: "application/json; charset=utf-8",
-            success: projectSaveSuccess(formData),
+            success: projectSaveSuccess,
             error: projectSaveError
         });
     }
@@ -83,7 +87,7 @@ function displayProjects(data) {
             project.status = "";
         }
 
-        $("#tblProjects tbody").append("<tr><td style='display:none;'>" + project.id + "</td><td>" + project.name + "</td><td>" + project.description + "</td>" + "<td>" + project.status + "</td>" + "<td>" + project.deadLine + "</td><td><a href='#' onclick='confirmDelete(\"" + project.id + "\")'><img src='./assets/img/icon/delete.svg'/></a></td></tr>");
+        $("#tblProjects tbody").append("<tr style='cursor:pointer;' class='clickable-row'><td style='display:none;'>" + project.id + "</td><td>" + project.name + "</td><td>" + project.description + "</td>" + "<td>" + project.status + "</td>" + "<td>" + project.deadLine + "</td><td><a href='#' onclick='confirmDelete(\"" + project.id + "\")'><img src='./assets/img/icon/delete.svg'/></a></td></tr>");
     });
 }
 
@@ -110,14 +114,24 @@ function deleteProject(projectId) {
     $.ajax({
         type: "DELETE",
         url: backendBaseUrl + httpRequestParamaters.backendUrlProjects + "/" + projectId,
-        success: projectDeleteSucces()
+        success: projectDeleteSucces,
+        error: projectDeleteError,
     });
 }
 
 function projectDeleteSucces(){
-    $("#deleteProjectModal").modal("close");
+    closeDeleteModal();
     showSnackbar("Project deleted!");
     refreshProjects();
+}
+
+function projectDeleteError(){
+    closeDeleteModal();
+    showSnackbar("Project could not be deleted, try again!");
+}
+
+function closeDeleteModal(){
+    $("#deleteProjectModal").modal("close");
 }
 
 function confirmDelete(projectId){
