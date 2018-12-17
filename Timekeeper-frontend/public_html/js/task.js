@@ -40,8 +40,7 @@ $(document).ready(function(){
         timekeeperStorage.setItem("taskProjectId",$("#taskProjectId").val());
         
         getTasksForProject($("#taskProjectId").val(), displayTasks);
-        //fill in project name in taskProject input field in modal form
-        $("#taskProject").val($("#taskProjectId option:selected").text());
+        updateTaskProject();
     });
 });
 
@@ -66,6 +65,8 @@ function getProjectsAsOptions(selectelement){
             }
         }
         
+        updateTaskProject();
+        
         $(selectelement).formSelect();//must be done after dynamically adding option elements/changing the selected value or lay-out will suck
         
         //initialize list of tasks for the currently selected (first) project of the list
@@ -76,6 +77,11 @@ function getProjectsAsOptions(selectelement){
         //NOTE: in case projects have been loaded and the service dies then, 
         //      clicking on the Save button will still catch the error
     });
+}
+
+function updateTaskProject(){
+    //fill in project name in taskProject input field in modal form
+    $("#taskProject").val($("#taskProjectId option:selected").text());
 }
 
 function getTasksForProject(projectId, cb) {
