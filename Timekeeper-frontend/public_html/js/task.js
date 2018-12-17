@@ -54,6 +54,8 @@ function getProjectsAsOptions(selectelement){
         //if no projects found, disable add button, else select first option default
         if($(selectelement.selector + " option").length == 0){
             $("#addTaskModalTrigger").addClass("disabled");
+        }else{
+            $(selectelement).val($(selectelement.selector + " option:first").val());
         }
         
         //change selected project if there is an item in local storage & if this project still exists in the list!
