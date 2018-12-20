@@ -15,7 +15,8 @@ $(document).ready(function () {
     $("#addProjectModalTrigger").on("click", function () {
         $("#addProjectModal").modal();
         $(".datepicker").datepicker({
-            format: 'yyyy-mm-dd'
+            format: 'yyyy-mm-dd',
+            firstDay: 1
         });
 
         //clear the form fields
@@ -38,6 +39,10 @@ $(document).ready(function () {
 
     $(".clickable-row").on("click", function(){
         console.log("test");
+    });
+
+    $(".datepicker-modal").keyup(function(){
+        console.log("enter");
     })
 });
 
@@ -74,9 +79,8 @@ function saveProjectToServer() {
 
 function getProjects(cb) {
     $.get(backendBaseUrl + httpRequestParamaters.backendUrlProjects, function (data) {
+        $("#addProjectModalTrigger").removeClass("disabled");
         cb(data);
-    }).fail(function(){
-        $("#addProjectModalTrigger").addClass("disabled");
     });
 }
 
