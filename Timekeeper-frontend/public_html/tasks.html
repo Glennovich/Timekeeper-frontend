@@ -71,6 +71,12 @@
                         <th>
                             Description
                         </th>
+                        <th>
+                            Status
+                        </th>
+                        <th>
+                            Priority
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -88,6 +94,7 @@
                 <form id="formAddTask">
                     <div class="row">
                         <div class="input-field col s12">
+                            <input type="hidden" id="taskId" name="taskId" value=""/>
                             <input type="text" id="taskProject" disabled>
                             <label for="taskProject">Project: </label>
                         </div>
@@ -105,6 +112,18 @@
                             <label for="taskDescription">Description: </label>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <select id="taskStatus" name="taskStatus"></select>
+                            <label for="taskStatus">Status: </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <select id="taskPriority" name="taskPriority"></select>
+                            <label for="taskPriority">Priority: </label>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -113,7 +132,7 @@
             </div>
         </div>
     </div>
-    <div id="snackbar">Task created!</div>
+    <div id="snackbar"></div>
 </body>
 
 </html>
