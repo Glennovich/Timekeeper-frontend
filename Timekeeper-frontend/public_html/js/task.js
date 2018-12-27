@@ -50,10 +50,9 @@ function getProjectsAsOptions(selectelement){
             $(selectelement).append(new Option(project.name, project.id));
         });
 
-        //if no projects found, disable add button, else select first option default
-        if($(selectelement.selector + " option").length == 0){
-            $("#addTaskModalTrigger").addClass("disabled");
-        }else{
+        //if projects found, enable add button and else select first option default
+        if($(selectelement.selector + " option").length > 0){
+            $("#addTaskModalTrigger").removeClass("disabled");
             $(selectelement).val($(selectelement.selector + " option:first").val());
         }
         
