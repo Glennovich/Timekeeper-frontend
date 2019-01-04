@@ -4,9 +4,11 @@ var defaultTaskPriority="Medium";
 $(document).ready(function(){
     //gets projects wrapped in options tags and appends them to our projects selectbox
     getProjectsAsOptions($("#taskProjectId"));
-    
     getStatusesAsOptions($("#taskStatus"));
     getPrioritiesAsOptions($("#taskPriority"));
+
+    //init all modals
+    $(".modal").modal();
 
     //handling events, as is the tradition
     $("#saveTask").on("click", function(){
@@ -18,7 +20,7 @@ $(document).ready(function(){
     });
     
     $("#addTaskModalTrigger").on("click", function () {
-        $("#addTaskModal").modal();
+        $("#addTaskModal").modal("open");
         
         //add-mode: only defaultTaskStatus can be selected, rest of the options disabled
         $("#taskStatus option[value!='Ready to start']").attr("disabled","disabled");
@@ -29,7 +31,7 @@ $(document).ready(function(){
         M.updateTextFields();
         
         //remove invalid class if needed and set focus on taskName
-        $("#taskName").val("").removeClass("invalid");
+        $("#taskName").removeClass("invalid");
         setTimeout(() => {
             $("#taskName").focus();
         }, 3);
@@ -46,13 +48,14 @@ $(document).ready(function(){
         //save current projectId
         timekeeperStorage.setItem("taskProjectId",$("#taskProjectId").val());
         
-        getTasksForProject($("#taskProjectId").val(), displayTasks);
+        getTasksForProject($("#taskProjectId").val());
         updateTaskProject();
     });
 });
 
 function getProjectsAsOptions(selectelement){
-    $.get(backendBaseUrl + httpRequestParamaters.backendUrlProjects, function (data) {
+    var url = backendBaseUrl + httpRequestParamaters.backendUrlProjects;
+    $.get(url, function (data) {
         $.each(data, function (id, project) {
             $(selectelement).append(new Option(project.name, project.id));
         });
@@ -76,7 +79,7 @@ function getProjectsAsOptions(selectelement){
         $(selectelement).formSelect();//must be done after dynamically adding option elements/changing the selected value or lay-out will suck
         
         //initialize list of tasks for the currently selected (first) project of the list
-        getTasksForProject($(selectelement).val(), displayTasks);
+        getTasksForProject($(selectelement).val());
     }).fail(function(){
         //getting projects failed: disable add button
         $("#addTaskModalTrigger").addClass("disabled");
@@ -90,17 +93,44 @@ function updateTaskProject(){
     $("#taskProject").val($("#taskProjectId option:selected").text());
 }
 
-function getTasksForProject(projectId, cb) {
-    $.get(backendBaseUrl + httpRequestParamaters.backendUrlTasksFromProject + "/" + projectId, function (data) {
-        cb(data);
+function getTasksForProject(projectId) {
+    var url = backendBaseUrl + httpRequestParamaters.backendUrlTasksFromProject + "/" + projectId;
+    $.get(url, function (data) {
+        displayTasks(data);
     });
 }
 function displayTasks(data) {
     clearTaskList();//before displaying new tasklist, we clear the old tasklist
     $.each(data, function (id, task) {
-        $("#tblTasks tbody").append("<tr><td>" + task.name + "</td><td>" + task.description + 
-                "</td><td>" + task.status + "</td><td>" + task.priority + "</td></tr>");
+        $("#tblTasks tbody").append("<tr id=\"" + task.id + "\" class=\"taskRow\"></tr>");
+        $("#tblTasks tbody tr:last-child")
+                .append("<td>" + task.name + "</td>")
+                .append("<td>" + task.description + "</td>")
+                .append("<td>" + task.status + "</td>")
+                .append("<td>" + task.priority + "</td>");
     });
+    
+    //add event for taskrow.click
+    $(".taskRow").on("click", function(){
+        $("#taskId").val(this.id);
+        $("#taskName").val(this.childNodes[0].innerText);
+        $("#taskDescription").val(this.childNodes[1].innerText);
+        $("#taskStatus").val(this.childNodes[2].innerText);
+        $("#taskPriority").val(this.childNodes[3].innerText);
+        
+        $("#addTaskModal").modal("open");
+        
+        //edit-mode: all statuses can be selected
+        $("#taskStatus option").removeAttr("disabled");
+        $("#taskStatus").formSelect();
+        
+        //call Materialize updateTextFields() after modal is shown to solve bug
+        //where the label of disabled fields is shown through the contents of the disabled field
+        M.updateTextFields();
+        
+        $("#taskName").removeClass("invalid").focus();
+    });
+    
     //add message to show when there are no projects
     if($("#tblTasks tbody tr").length == 0){
         $("#tblTasks tbody").append("<tr><td>No tasks found for this project</td><td></td><td></td><td></td></tr>");
@@ -111,7 +141,8 @@ function clearTaskList(){
 }
 
 function getStatusesAsOptions(selectelement){
-    $.get(backendBaseUrl + httpRequestParamaters.backendUrlStatuses, function (data) {
+    var url = backendBaseUrl + httpRequestParamaters.backendUrlStatuses;
+    $.get(url, function (data) {
         $.each(data.taskStatuses, function (id, taskstatus) {
             $(selectelement).append(new Option(taskstatus.name, taskstatus.name));
         });
@@ -132,7 +163,8 @@ function getStatusesAsOptions(selectelement){
 }
 
 function getPrioritiesAsOptions(selectelement){
-    $.get(backendBaseUrl + httpRequestParamaters.backendUrlPriorities, function (data) {
+    var url = backendBaseUrl + httpRequestParamaters.backendUrlPriorities;
+    $.get(url, function (data) {
         $.each(data.projectStatuses, function (id, priority) {
             $(selectelement).append(new Option(priority.name, priority.name));
         });
@@ -166,15 +198,19 @@ function clearFormAddTask(){
 
 function saveTask(){
     if($.trim($("#taskName").val()) != ""){
-        if($.trim($("#taskId").val()) != ""){//TODO: prepare GUI for editing records
+        if($.trim($("#taskId").val()) != ""){
             //edit existing task
+            var d = new Date();
+            var currentTime = d.getFullYear() + "-" + prependZeroes((d.getMonth()+1),2) + "-" + prependZeroes(d.getDate(),2) 
+                    + "T" + prependZeroes(d.getHours(),2) + ":" + prependZeroes(d.getMinutes(),2) + ":00";
             var formData = {
                 "id": $("#taskId").val(),
                 "name": $("#taskName").val(),
                 "description": $("#taskDescription").val(),
                 "projectId": $("#taskProjectId").val(),
                 "status": $("#taskStatus").val(),
-                "priority": $("#taskPriority").val()
+                "priority": $("#taskPriority").val(),
+                "currentTime": currentTime
             };
             formData = JSON.stringify(formData);
             $.ajax({
@@ -207,6 +243,18 @@ function saveTask(){
     }
 }
 
+function prependZeroes(number,maxlength){
+    return number.toString().length < maxlength ? times("0",maxlength-number.toString().length) + number : number;
+}
+
+function times(dink,numberOfTimes){
+    var strTimes="";
+    for(var i = 0;i<numberOfTimes;i++){
+        strTimes+=dink;
+    }
+    return strTimes;
+}
+
 function taskAddSuccess(data, textStatus, jqXHR) {
     clearFormAddTask();
     
@@ -227,6 +275,28 @@ function taskAddError(jqXHR, textStatus, errorThrown) {
         $("#taskAddFailedMessage").text(jqXHR.responseJSON.message).show();
     }else{
         $("#taskAddFailedMessage").text("Task could not be added, please try again later!").show();
+    }
+}
+
+function taskEditSuccess(data, textStatus, jqXHR) {
+    clearFormAddTask();
+    $("#addTaskModal").modal("close");
+
+    //show a snackbar to let the user know that the task is created successfully
+    snackbar("Task changed!");
+
+    //reload row for changed task
+    setTimeout(() => {
+        getTasksForProject($("#taskProjectId").val(),displayTasks);
+    }, 100);
+}
+
+function taskEditError(jqXHR, textStatus, errorThrown) {
+    //if we have an error: show it, otherwise: default error
+    if(jqXHR.responseJSON && jqXHR.responseJSON.message){
+        $("#taskAddFailedMessage").text(jqXHR.responseJSON.message).show();
+    }else{
+        $("#taskAddFailedMessage").text("Task could not be changed, please try again later!").show();
     }
 }
 
