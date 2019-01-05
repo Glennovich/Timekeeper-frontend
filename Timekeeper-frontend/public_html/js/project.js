@@ -13,11 +13,9 @@ $(document).ready(function () {
     });
 
     $("#addProjectModalTrigger").on("click", function () {
+        $("#addOrUpdate").val("ADD");
         $("#addProjectModal").modal();
-        $(".datepicker").datepicker({
-            format: 'yyyy-mm-dd',
-            firstDay: 1
-        });
+        initDatePicker();
 
         //clear the form fields
         clearForm();
@@ -36,21 +34,13 @@ $(document).ready(function () {
     $("#projectDueDate").on("focus", function () {
         $("#projectDueDate").click();
     });
-
-    $(".clickable-row").on("click", function(){
-        console.log("test");
-    });
-
-    $(".datepicker-modal").keyup(function(){
-        console.log("enter");
-    })
 });
 
 function clearForm() {
     //focus on input field name and remove invalid class if neede
     $("#projectName").val("").removeClass("invalid");
     $("#projectDescription").val("");
-    $("#projectDueDate").val("");
+    $("#projectDueDate").val("").removeClass("invalid");
 }
 
 function saveProjectToServer() {
@@ -58,22 +48,43 @@ function saveProjectToServer() {
         $("#projectName").val("");
     }
     if ($("#projectName").val() != "") {
-        var formData = {
-            "name": $("#projectName").val(),
-            "description": $("#projectDescription").val(),
-            "deadLine": $("#projectDueDate").val()
-        };
+        if ($("#addOrUpdate").val() === "ADD") {
+            var formData = {
+                "name": $("#projectName").val(),
+                "description": $("#projectDescription").val(),
+                "deadLine": $("#projectDueDate").val()
+            };
 
-        formData = JSON.stringify(formData);
+            formData = JSON.stringify(formData);
 
-        $.ajax({
-            type: "POST",
-            url: backendBaseUrl + httpRequestParamaters.backendUrlProjects,
-            data: formData,
-            contentType: "application/json; charset=utf-8",
-            success: projectSaveSuccess,
-            error: projectSaveError
-        });
+            $.ajax({
+                type: "POST",
+                url: backendBaseUrl + httpRequestParamaters.backendUrlProjects,
+                data: formData,
+                contentType: "application/json; charset=utf-8",
+                success: projectSaveSuccess,
+                error: projectSaveError
+            });
+        } else {
+            var formData = {
+                "id": $("#projectId").val(),
+                "name": $("#projectName").val(),
+                "description": $("#projectDescription").val(),
+                "deadLine": $("#projectDueDate").val(),
+                "status": $("#projectStatus").val()
+            }
+
+            formData = JSON.stringify(formData);
+
+            $.ajax({
+                type: "PUT",
+                data: formData,
+                contentType: "application/json; charset=utf-8",
+                url: backendBaseUrl + httpRequestParamaters.backendUrlProjects,
+                success: projectUpdateSuccess,
+                error: projectSaveError,
+            });
+        }
     }
 }
 
@@ -93,15 +104,34 @@ function displayProjects(data) {
             project.status = "";
         }
 
-        $("#tblProjects tbody").append("<tr style='cursor:pointer;' class='clickable-row'><td style='display:none;'>" + project.id + "</td><td>" + project.name + "</td><td>" + project.description + "</td>" + "<td>" + project.status + "</td>" + "<td>" + project.deadLine + "</td><td><a href='#' onclick='confirmDelete(\"" + project.id + "\")'><img src='./assets/img/icon/delete.svg'/></a></td></tr>");
+        $("#tblProjects tbody").append("<tr style='cursor:pointer;' class='clickable-row'><td style='display:none;'>" + project.id + "</td><td class='project_" + project.id + "'>" + project.name + "</td><td class='project_" + project.id + "'>" + project.description + "</td>" + "<td class='project_" + project.id + "'>" + project.status + "</td>" + "<td class='project_" + project.id + "'>" + project.deadLine + "</td><td>" + project.numberOfTasks + "</td><td><a href='#' onclick='confirmDelete(\"" + project.id + "\",\"" + project.status + "\")'><img src='./assets/img/icon/delete.svg'/></a></td></tr>");
+
+        $(".project_" + project.id).on("click", function () {
+            showDetailModal(project);
+        })
     });
 }
 
 function projectSaveSuccess(data, textStatus, jqXHR) {
-    $("input").val("");
-    $('#addProjectModal').modal('close');
+    clearInputFields();
+    closeAddModal();
     showSnackbar("Project created!");
     refreshProjects();
+}
+
+function projectUpdateSuccess(data, textStatus, jqXHR){
+    clearInputFields();
+    closeAddModal();
+    showSnackbar("Project updated!");
+    refreshProjects();
+}
+
+function closeAddModal(){
+    $('#addProjectModal').modal('close');
+}
+
+function clearInputFields(){
+    $("input").val("");
 }
 
 function refreshProjects() {
@@ -125,34 +155,74 @@ function deleteProject(projectId) {
     });
 }
 
-function projectDeleteSucces(){
-    closeDeleteModal();
+function projectDeleteSucces() {
     showSnackbar("Project deleted!");
     refreshProjects();
 }
 
-function projectDeleteError(){
-    closeDeleteModal();
+function projectDeleteError() {
     showSnackbar("Project could not be deleted, try again!");
 }
 
-function closeDeleteModal(){
+function closeDeleteModal() {
     $("#deleteProjectModal").modal("close");
 }
 
-function confirmDelete(projectId){
+function confirmDelete(projectId, projectStatus) {
     $("#deleteProjectModal").modal("open");
 
-    $("#deleteProject").on("click", function(){
-        deleteProject(projectId);
+    $("#deleteProject").on("click", function () {
+        if (projectStatus == "Done") {
+            secondConfirmationDelete(projectId);
+        } else {
+            deleteProject(projectId);
+            closeDeleteModal();
+        }
     })
 }
 
-function showSnackbar(message){
-        //show a snackbar to let the user know that the project is created successfully
-        $("#snackbar").text(message);
-        $("#snackbar").addClass("show");
-        setTimeout(() => {
-            $("#snackbar").removeClass("show");
-        }, 3000);
+function secondConfirmationDelete(projectId) {
+    closeDeleteModal();
+    $("#deleteDoneProjectModal").modal("open");
+
+    $("#deleteDoneProject").on("click", function () {
+        deleteProject(projectId);
+        $("#deleteDoneProjectModal").modal("close");
+    })
+}
+
+function showSnackbar(message) {
+    //show a snackbar to let the user know that the project is created successfully
+    $("#snackbar").text(message);
+    $("#snackbar").addClass("show");
+    setTimeout(() => {
+        $("#snackbar").removeClass("show");
+    }, 3000);
+}
+
+function showDetailModal(project) {
+    //fill in fields of modal but first clear to delete error messages
+    clearForm();
+    fillInModalFields(project);
+    initDatePicker();
+
+    //set the placeholders right and open the modal
+    M.updateTextFields();
+    $("#addProjectModal").modal("open");
+}
+
+function initDatePicker(){
+    $(".datepicker").datepicker({
+        format: 'yyyy-mm-dd',
+        firstDay: 1
+    });
+}
+
+function fillInModalFields(project){
+    $("#addOrUpdate").val("UPDATE");
+    $("#projectId").val(project.id);
+    $("#projectName").val(project.name);
+    $("#projectDescription").val(project.description);
+    $("#projectDueDate").val(project.deadLine);
+    $("#projectStatus").val(project.status);
 }

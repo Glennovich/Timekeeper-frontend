@@ -72,6 +72,9 @@
                             Deadline
                         </th>
                         <th>
+                            Tasks
+                        </th>
+                        <th>
 
                         </th>
                     </tr>
@@ -85,6 +88,9 @@
         <!--Modal to add a project-->
         <div id="addProjectModal" class="modal">
             <div class="modal-content">
+                <input type="hidden" id="projectId">
+                <input type="hidden" id="addOrUpdate">
+                <input type="hidden" id="projectStatus">
                 <div class="row">
                     <span id="projectAddFailedMessage" style="display: none;" class="red-text">Project could not be
                         added, please try again!</span>
@@ -121,14 +127,26 @@
 
     <!--Modal to confirm delete of a project-->
     <div id="deleteProjectModal" class="modal">
-            <div class="modal-content">
-                ARE YOU SURE YOU WANT TO DELETE THIS PROJECT?
-            </div>
-            <div class="modal-footer">
-                <a class="modal-close waves-effect waves-green btn-flat">NO</a>
-                <button id="deleteProject" class="waves-effect waves-green btn-flat" type="submit">YES</button>
-            </div>
+        <div class="modal-content">
+            ARE YOU SURE YOU WANT TO DELETE THIS PROJECT?
         </div>
+        <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">NO</a>
+            <button id="deleteProject" class="waves-effect waves-green btn-flat" type="submit">YES</button>
+        </div>
+    </div>
+    </div>
+    <!--Modal to confirm delete of a project-->
+    <div id="deleteDoneProjectModal" class="modal">
+        <div class="modal-content">
+            THIS PROJECT IS DONE! ARE YOU REALLY SURE YOU WANT TO DELETE THIS PROJECT?
+        </div>
+        <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">NO</a>
+            <button id="deleteDoneProject" class="waves-effect waves-green btn-flat" type="submit">YES</button>
+        </div>
+    </div>
+    </div>
     </div>
     <div id="snackbar"></div>
 </body>
