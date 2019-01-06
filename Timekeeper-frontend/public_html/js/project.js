@@ -58,7 +58,6 @@ function getProjectsError(){
 }
 
 function displayProjects(response) {
-    console.log("flag1");
     $("#addProjectModalTrigger").removeClass("disabled");
     $.each(JSON.parse(response), function (id, project) {
         initializeFieldsForDisplay(project);
