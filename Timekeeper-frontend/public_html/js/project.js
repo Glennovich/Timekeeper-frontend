@@ -45,7 +45,7 @@ function clearForm() {
     //focus on input field name and remove invalid class if neede
     $("#projectName").val("").removeClass("invalid");
     $("#projectDescription").val("");
-    $("#projectDueDate").val("");
+    $("#projectDueDate").val("").removeClass("invalid");
 }
 
 function getProjects(cb) {
