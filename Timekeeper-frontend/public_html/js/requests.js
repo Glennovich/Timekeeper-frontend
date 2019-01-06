@@ -61,7 +61,7 @@ function createCORSRequest(method, url) {
 }
 
 function setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError) {
-    xhr.onreadystatechange = function () {
+    xhr.onload = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status == 401) {
                 window.location.href = '401.html';

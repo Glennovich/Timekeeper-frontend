@@ -50,10 +50,15 @@ function clearForm() {
 
 function getProjects(cb) {
     var url = backendBaseUrl + httpRequestParamaters.backendUrlProjects;
-    get(url, cb);
+    get(url, cb, getProjectsError);
+}
+
+function getProjectsError(){
+    $("#addProjectModalTrigger").addClass("disabled");
 }
 
 function displayProjects(response) {
+    console.log("flag1");
     $("#addProjectModalTrigger").removeClass("disabled");
     $.each(JSON.parse(response), function (id, project) {
         initializeFieldsForDisplay(project);
