@@ -25,7 +25,7 @@
     </head>
 
     <body>
-        <nav>
+        <nav style="background-color: #26a69a;">
             <div class="nav-wrapper">
                 <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                 <ul class="left hide-on-med-and-down">
@@ -85,10 +85,10 @@
 
             <!--Modal to add a project-->
             <div id="addProjectModal" class="modal">
-                <input type="hidden" id="projectId">
-                <input type="hidden" id="addOrUpdate">
-                <input type="hidden" id="projectStatus">
                 <div class="modal-content">
+                    <input type="hidden" id="projectId">
+                    <input type="hidden" id="addOrUpdate">
+                    <input type="hidden" id="projectStatus">
                     <div class="row">
                         <span id="projectAddFailedMessage" style="display: none;" class="red-text">Project could not be
                             added, please try again!</span>
@@ -133,25 +133,16 @@
                 <button id="deleteProject" class="waves-effect waves-green btn-flat" type="submit">YES</button>
             </div>
         </div>
-        <div class="modal-footer">
-            <a class="modal-close waves-effect waves-green btn-flat">NO</a>
-            <button id="deleteProject" class="waves-effect waves-green btn-flat" type="submit">YES</button>
+        <!--Modal to confirm delete of a project-->
+        <div id="deleteDoneProjectModal" class="modal">
+            <div class="modal-content">
+                THIS PROJECT IS DONE! ARE YOU REALLY SURE YOU WANT TO DELETE THIS PROJECT?
+            </div>
+            <div class="modal-footer">
+                <a class="modal-close waves-effect waves-green btn-flat">NO</a>
+                <button id="deleteDoneProject" class="waves-effect waves-green btn-flat" type="submit">YES</button>
+            </div>
         </div>
-    </div>
-    </div>
-    <!--Modal to confirm delete of a project-->
-    <div id="deleteDoneProjectModal" class="modal">
-        <div class="modal-content">
-            THIS PROJECT IS DONE! ARE YOU REALLY SURE YOU WANT TO DELETE THIS PROJECT?
-        </div>
-        <div class="modal-footer">
-            <a class="modal-close waves-effect waves-green btn-flat">NO</a>
-            <button id="deleteDoneProject" class="waves-effect waves-green btn-flat" type="submit">YES</button>
-        </div>
-    </div>
-    </div>
-    </div>
-    <div id="snackbar"></div>
-</body>
-
+        <div id="snackbar"></div>
+    </body>
 </html>
