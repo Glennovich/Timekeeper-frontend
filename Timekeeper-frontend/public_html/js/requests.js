@@ -63,9 +63,14 @@ function createCORSRequest(method, url) {
 function setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status == 401) {
+                window.location.href = '401.html';
+                return;
+            }
             try {
                 functionOnSucces(xhr.response);
-            } catch (e) {}
+            } catch (e) {
+            }
         }
     }
 
@@ -73,7 +78,8 @@ function setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError) {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             try {
                 functionOnError(xhr.response);
-            } catch (e) {}
+            } catch (e) {
+            }
         }
 
     }
