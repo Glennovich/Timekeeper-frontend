@@ -96,6 +96,15 @@ textarea {
    ========================================================================== */
 
 
+.clickable-row{
+    cursor:pointer;
+}
+#tblProjects tr td:first-child{
+    display:none;
+}
+nav{
+    background-color: #26a69a;
+}
 
 
 

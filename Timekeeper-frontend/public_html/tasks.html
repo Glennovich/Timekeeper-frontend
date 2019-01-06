@@ -4,30 +4,29 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Timekeeper - Tasks</title>
     <meta name="description" content="Timekeeper. A simple time tracking tool that helps you track time on your projects. Once you start using it, you'll realize that this tool is a keeper, a timekeeper.">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="google" value="notranslate">
-    <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW"><!-- TODO: remove when going live -->
 
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <!-- TODO: Place favicon.ico in the root directory -->
-
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="css/timekeeper.css">
+
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
     <script src="js/config.js"></script>
     <script src="js/plugins.js"></script>
     <script src="js/main.js"></script>
     <script src="js/task.js"></script>
+    <script src="js/requests.js"></script>
 </head>
 
 <body>
-    <nav style="background-color: #26a69a;">
+    <nav>
         <div class="nav-wrapper">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="left hide-on-med-and-down">
@@ -71,7 +70,13 @@
                         <th>
                             Description
                         </th>
-                    </tr>
+                        <th>
+                            Status
+                        </th>
+                        <th>
+                            Priority
+                        </th>
+                     </tr>
                 </thead>
                 <tbody>
 
@@ -88,6 +93,7 @@
                 <form id="formAddTask">
                     <div class="row">
                         <div class="input-field col s12">
+                            <input type="hidden" id="taskId" name="taskId" value=""/>
                             <input type="text" id="taskProject" disabled>
                             <label for="taskProject">Project: </label>
                         </div>
@@ -103,6 +109,18 @@
                         <div class="input-field col s12">
                             <textarea id="taskDescription" name="taskDescription" placeholder="description for the task" class="materialize-textarea"></textarea>
                             <label for="taskDescription">Description: </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <select id="taskStatus" name="taskStatus"></select>
+                            <label for="taskStatus">Status: </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <select id="taskPriority" name="taskPriority"></select>
+                            <label for="taskPriority">Priority: </label>
                         </div>
                     </div>
                 </form>

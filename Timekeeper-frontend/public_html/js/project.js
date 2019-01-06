@@ -7,17 +7,18 @@ $(document).ready(function () {
     //init all modal
     $(".modal").modal();
 
-    //event listeners
+    initializeEventHandlers();
+});
+
+function initializeEventHandlers() {
     $("#saveProject").on("click", function () {
-        saveProjectToServer();
+        saveProject();
     });
 
     $("#addProjectModalTrigger").on("click", function () {
+        $("#addOrUpdate").val("ADD");
         $("#addProjectModal").modal();
-        $(".datepicker").datepicker({
-            format: 'yyyy-mm-dd',
-            firstDay: 1
-        });
+        initDatePicker();
 
         //clear the form fields
         clearForm();
@@ -28,8 +29,8 @@ $(document).ready(function () {
     });
 
     $("input").keyup(function (e) {
-        if (e.keyCode == 13) {
-            saveProjectToServer();
+        if (e.keyCode === 13) {
+            saveProject();
         }
     });
 
@@ -37,14 +38,8 @@ $(document).ready(function () {
         $("#projectDueDate").click();
     });
 
-    $(".clickable-row").on("click", function(){
-        console.log("test");
-    });
+}
 
-    $(".datepicker-modal").keyup(function(){
-        console.log("enter");
-    })
-});
 
 function clearForm() {
     //focus on input field name and remove invalid class if neede
@@ -53,55 +48,45 @@ function clearForm() {
     $("#projectDueDate").val("");
 }
 
-function saveProjectToServer() {
-    if ($("#projectName").val().replace(/ /g, '') == "") {
-        $("#projectName").val("");
-    }
-    if ($("#projectName").val() != "") {
-        var formData = {
-            "name": $("#projectName").val(),
-            "description": $("#projectDescription").val(),
-            "deadLine": $("#projectDueDate").val()
-        };
-
-        formData = JSON.stringify(formData);
-
-        $.ajax({
-            type: "POST",
-            url: backendBaseUrl + httpRequestParamaters.backendUrlProjects,
-            data: formData,
-            contentType: "application/json; charset=utf-8",
-            success: projectSaveSuccess,
-            error: projectSaveError
-        });
-    }
-}
-
 function getProjects(cb) {
-    $.get(backendBaseUrl + httpRequestParamaters.backendUrlProjects, function (data) {
-        $("#addProjectModalTrigger").removeClass("disabled");
-        cb(data);
-    });
+    var url = backendBaseUrl + httpRequestParamaters.backendUrlProjects;
+    get(url, cb);
 }
 
-function displayProjects(data) {
-    $.each(data, function (id, project) {
-        if (project.deadLine == undefined) {
-            project.deadLine = "";
-        }
-        if (project.status == undefined) {
-            project.status = "";
-        }
+function displayProjects(response) {
+    $("#addProjectModalTrigger").removeClass("disabled");
+    $.each(JSON.parse(response), function (id, project) {
+        initializeFieldsForDisplay(project);
+        $("#tblProjects tbody")
+                .append("<tr class='clickable-row projectRow project_" + project.id + "'></tr>");
+        $("#tblProjects tbody tr:last-child")
+                .append("<td>" + project.id + "</td>")
+                .append("<td>" + project.name + "</td>")
+                .append("<td>" + project.description + "</td>")
+                .append("<td>" + project.status + "</td>")
+                .append("<td>" + project.deadLine + "</td>")
+                .append("<td class='trashcan'><a href='#'><img src='./assets/img/icon/delete.svg'/></a></td>");
 
-        $("#tblProjects tbody").append("<tr style='cursor:pointer;' class='clickable-row'><td style='display:none;'>" + project.id + "</td><td>" + project.name + "</td><td>" + project.description + "</td>" + "<td>" + project.status + "</td>" + "<td>" + project.deadLine + "</td><td><a href='#' onclick='confirmDelete(\"" + project.id + "\")'><img src='./assets/img/icon/delete.svg'/></a></td></tr>");
+        $(".project_" + project.id + " td").on("click", function () {
+            showDetailModal(project);
+        })
     });
+
+    $(".projectRow .trashcan").off();
+    $(".projectRow .trashcan a").on("click", function () {
+        var id = $(this).closest("tr").find("td:first-child").html();
+        confirmDelete(id);
+    });
+
 }
 
-function projectSaveSuccess(data, textStatus, jqXHR) {
-    $("input").val("");
-    $('#addProjectModal').modal('close');
-    showSnackbar("Project created!");
-    refreshProjects();
+function initializeFieldsForDisplay(project) {
+    if (project.deadLine == undefined) {
+        project.deadLine = "";
+    }
+    if (project.status == undefined) {
+        project.status = "";
+    }
 }
 
 function refreshProjects() {
@@ -112,47 +97,134 @@ function refreshProjects() {
     }, 300);
 }
 
-function projectSaveError(jqXHR, textStatus, errorThrown) {
+
+function saveProject() {
+    if ($("#projectName").val().replace(/ /g, '') === "") {
+        $("#projectName").val("");
+    }
+    if ($("#projectName").val() !== "") {
+        var url = backendBaseUrl + httpRequestParamaters.backendUrlProjects;
+        if ($("#addOrUpdate").val() === "ADD") {
+            var formData = {
+                "name": $("#projectName").val(),
+                "description": $("#projectDescription").val(),
+                "deadLine": $("#projectDueDate").val()
+            };
+            post(url, formData, projectSaveSuccess, projectSaveError);
+        } else {
+            var formData = {
+                "id": $("#projectId").val(),
+                "name": $("#projectName").val(),
+                "description": $("#projectDescription").val(),
+                "deadLine": $("#projectDueDate").val(),
+                "status": $("#projectStatus").val()
+            }
+            put(url, formData, projectUpdateSuccess, projectSaveError);
+        }
+    }
+}
+
+function projectSaveSuccess() {
+    $("input").val("");
+    closeAddModal();
+    showSnackbar("Project created!");
+    refreshProjects();
+}
+
+function closeAddModal() {
+    $('#addProjectModal').modal('close');
+}
+
+function projectUpdateSuccess() {
+    clearInputFields();
+    closeAddModal();
+    showSnackbar("Project updated!");
+    refreshProjects();
+}
+
+function clearInputFields() {
+    $("input").val("");
+}
+
+function projectSaveError() {
     $("#projectAddFailedMessage").show();
 }
 
 function deleteProject(projectId) {
-    $.ajax({
-        type: "DELETE",
-        url: backendBaseUrl + httpRequestParamaters.backendUrlProjects + "/" + projectId,
-        success: projectDeleteSucces,
-        error: projectDeleteError,
-    });
+    var url = backendBaseUrl + httpRequestParamaters.backendUrlProjects + "/" + projectId;
+    remove(url, projectDeleteSucces, projectDeleteError);
 }
 
-function projectDeleteSucces(){
-    closeDeleteModal();
+function projectDeleteSucces() {
     showSnackbar("Project deleted!");
     refreshProjects();
 }
 
-function projectDeleteError(){
+function projectDeleteError() {
     closeDeleteModal();
     showSnackbar("Project could not be deleted, try again!");
 }
 
-function closeDeleteModal(){
+function closeDeleteModal() {
     $("#deleteProjectModal").modal("close");
+    $("#deleteProject").off();
 }
 
-function confirmDelete(projectId){
+function confirmDelete(projectId, projectStatus) {
     $("#deleteProjectModal").modal("open");
 
-    $("#deleteProject").on("click", function(){
-        deleteProject(projectId);
+    $("#deleteProject").on("click", function () {
+        if (projectStatus == "Done") {
+            secondConfirmationDelete(projectId);
+        } else {
+            deleteProject(projectId);
+            closeDeleteModal();
+        }
     })
 }
 
-function showSnackbar(message){
-        //show a snackbar to let the user know that the project is created successfully
-        $("#snackbar").text(message);
-        $("#snackbar").addClass("show");
-        setTimeout(() => {
-            $("#snackbar").removeClass("show");
-        }, 3000);
+function secondConfirmationDelete(projectId) {
+    closeDeleteModal();
+    $("#deleteDoneProjectModal").modal("open");
+
+    $("#deleteDoneProject").on("click", function () {
+        deleteProject(projectId);
+        $("#deleteDoneProjectModal").modal("close");
+    })
+}
+
+function showSnackbar(message) {
+    //show a snackbar to let the user know that the project is created successfully
+    $("#snackbar").text(message);
+    $("#snackbar").addClass("show");
+    setTimeout(() => {
+        $("#snackbar").removeClass("show");
+    }, 3000);
+}
+
+function showDetailModal(project) {
+    //fill in fields of modal but first clear to delete error messages
+    clearForm();
+    fillInModalFields(project);
+    initDatePicker();
+
+    //set the placeholders right and open the modal
+    M.updateTextFields();
+    $("#addProjectModal").modal("open");
+}
+
+function initDatePicker() {
+    $(".datepicker").datepicker({
+        format: 'yyyy-mm-dd',
+        firstDay: 1
+    });
+}
+
+function fillInModalFields(project) {
+    $("#addOrUpdate").val("UPDATE");
+    $("#projectId").val(project.id);
+    $("#projectName").val(project.name);
+    $("#projectDescription").val(project.description);
+    $("#projectDueDate").val(project.deadLine);
+    $("#projectStatus").val(project.status);
 }
