@@ -53,11 +53,27 @@ function initializeEventHandlers() {
     });
 
     $("#taskProjectId").on("change", function () {
-        //save current projectId
-        timekeeperStorage.setItem("taskProjectId", $("#taskProjectId").val());
 
-        getTasksForProject($("#taskProjectId").val(), displayTasks);
-        updateTaskProject();
+        if ($("#taskProjectId")[0].selectedIndex === -1) {
+            //This bug appears when the server shuts down and restarts, and then we refresh the page. 
+            //The select of the projects seems to loose all it's data. This is a temporary fix until the real problem is found.
+            setTimeout(() => {
+                getProjectsAsOptions();
+                $("#taskProjectId")[0].selectedIndex = 0;
+                //save current projectId
+                timekeeperStorage.setItem("taskProjectId", $("#taskProjectId").val());
+
+                getTasksForProject($("#taskProjectId").val(), displayTasks);
+                updateTaskProject();
+            }, 1000);
+        } else {
+            //save current projectId
+            timekeeperStorage.setItem("taskProjectId", $("#taskProjectId").val());
+
+            getTasksForProject($("#taskProjectId").val(), displayTasks);
+            updateTaskProject();
+        }
+
     });
 }
 
