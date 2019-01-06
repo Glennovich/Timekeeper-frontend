@@ -65,6 +65,7 @@ function displayProjects(response) {
                 .append("<td>" + project.description + "</td>")
                 .append("<td>" + project.status + "</td>")
                 .append("<td>" + project.deadLine + "</td>")
+                .append("<td>" + project.numberOfTasks  + "</td>")
                 .append("<td class='trashcan'><a href='#'><img src='./assets/img/icon/delete.svg'/></a></td>");
 
         $(".project_" + project.id + " td").on("click", function () {
