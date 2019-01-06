@@ -108,7 +108,7 @@ function saveProject() {
         $("#projectName").val("");
     }
     if ($("#projectName").val() !== "") {
-        var url = backendBaseUrl + httpRequestParamaters.backendUrlProjects;
+        var url = backendBaseUrl + httpRequestParamaters.backendUrlProject;
         if ($("#addOrUpdate").val() === "ADD") {
             var formData = {
                 "name": $("#projectName").val(),
@@ -156,7 +156,7 @@ function projectSaveError() {
 }
 
 function deleteProject(projectId) {
-    var url = backendBaseUrl + httpRequestParamaters.backendUrlProjects + "/" + projectId;
+    var url = backendBaseUrl + httpRequestParamaters.backendUrlProject + "/" + projectId;
     remove(url, projectDeleteSucces, projectDeleteError);
 }
 

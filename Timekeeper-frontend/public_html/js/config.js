@@ -1,6 +1,7 @@
 var httpRequestParamaters = {
     "backendUrlDev": "http://localhost:9250/",
-    "backendUrlProjects": "project",
+    "backendUrlProject": "project",
+    "backendUrlProjects": "projects",
     "backendUrlTasks": "task",
     "backendUrlTasksFromProject": "tasks",
     "backendUrlStatuses": "task/_statuses",
