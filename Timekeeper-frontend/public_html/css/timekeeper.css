@@ -94,13 +94,10 @@ textarea {
 /* ==========================================================================
    Custom Timekeeper styles section <----------------------------------------
    ========================================================================== */
-.taskRow {
+.trashcan, .pencil {
     cursor: pointer;
 }
 
-.clickable-row{
-    cursor:pointer;
-}
 #tblProjects tr td:first-child{
     display:none;
 }
