@@ -18,13 +18,15 @@ function initializeEventHandlers() {
     $("#addProjectModalTrigger").on("click", function () {
         $("#addOrUpdate").val("ADD");
         $("#addProjectModal").modal();
-        initDatePicker();
+        initDatePicker(true);
 
         //clear the form fields
         clearForm();
 
         setTimeout(() => {
             $("#projectName").focus();
+            $("#projectDueDateLabel").removeClass("active");
+            $("#projectDescriptionLabel").removeClass("active");
         }, 3);
     });
 
@@ -211,18 +213,29 @@ function showDetailModal(project) {
     //fill in fields of modal but first clear to delete error messages
     clearForm();
     fillInModalFields(project);
-    initDatePicker();
 
     //set the placeholders right and open the modal
     M.updateTextFields();
     $("#addProjectModal").modal("open");
+    initDatePicker(false);
 }
 
-function initDatePicker() {
-    $(".datepicker").datepicker({
-        format: 'yyyy-mm-dd',
-        firstDay: 1
-    });
+function initDatePicker(add) {
+    if(add){
+        var now = new Date();
+        now.setDate(now.getDate() + 31);
+        $(".datepicker").datepicker({
+            format: 'yyyy-mm-dd',
+            firstDay: 1,
+            setDefaultDate: true,
+            defaultDate: now
+        });
+    } else {
+        $(".datepicker").datepicker({
+            format: 'yyyy-mm-dd',
+            firstDay: 1
+        });
+    }
 }
 
 function fillInModalFields(project) {
