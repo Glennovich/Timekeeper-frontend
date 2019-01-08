@@ -53,7 +53,7 @@ function getProjects(cb) {
     get(url, cb, getProjectsError);
 }
 
-function getProjectsError(){
+function getProjectsError() {
     $("#addProjectModalTrigger").addClass("disabled");
 }
 
@@ -62,27 +62,24 @@ function displayProjects(response) {
     $.each(JSON.parse(response), function (id, project) {
         initializeFieldsForDisplay(project);
         $("#tblProjects tbody")
-                .append("<tr class='clickable-row projectRow project_" + project.id + "'></tr>");
+                .append("<tr class='clickable-row projectRow' id='project_" + project.id + "'></tr>");
         $("#tblProjects tbody tr:last-child")
                 .append("<td>" + project.id + "</td>")
                 .append("<td>" + project.name + "</td>")
                 .append("<td>" + project.description + "</td>")
                 .append("<td>" + project.status + "</td>")
                 .append("<td>" + project.deadLine + "</td>")
-                .append("<td>" + project.numberOfTasks  + "</td>")
-                .append("<td class='trashcan'><a href='#'><img src='./assets/img/icon/delete.svg'/></a></td>");
+                .append("<td>" + project.numberOfTasks + "</td>")
+                .append("<td class='pencil'><img src='./assets/img/icon/edit.svg'/></td>")
+                .append("<td class='trashcan'><img src='./assets/img/icon/delete.svg'/></td>");
 
-        $(".project_" + project.id + " td").on("click", function () {
+        $("#project_" + project.id + " .pencil").on("click", function () {
             showDetailModal(project);
-        })
+        });
+        $("#project_" + project.id + " .trashcan").on("click", function () {
+            confirmDelete(project.id);
+        });
     });
-
-    $(".projectRow .trashcan").off();
-    $(".projectRow .trashcan a").on("click", function () {
-        var id = $(this).closest("tr").find("td:first-child").html();
-        confirmDelete(id);
-    });
-
 }
 
 function initializeFieldsForDisplay(project) {

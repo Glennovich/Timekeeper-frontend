@@ -1,5 +1,7 @@
 var defaultTaskStatus = "Ready to start";
 var defaultTaskPriority = "Medium";
+var statusses;
+var priorities;
 
 $(document).ready(function () {
     //gets projects wrapped in options tags and appends them to our projects selectbox
@@ -53,7 +55,6 @@ function initializeEventHandlers() {
     });
 
     $("#taskProjectId").on("change", function () {
-
         if ($("#taskProjectId")[0].selectedIndex === -1) {
             //This bug appears when the server shuts down and restarts, and then we refresh the page. 
             //The select of the projects seems to loose all it's data. This is a temporary fix until the real problem is found.
@@ -73,7 +74,6 @@ function initializeEventHandlers() {
             getTasksForProject($("#taskProjectId").val(), displayTasks);
             updateTaskProject();
         }
-
     });
 }
 
@@ -136,39 +136,79 @@ function getTasksForProject(projectId, cb) {
 function displayTasks(data) {
     clearTaskList();//before displaying new tasklist, we clear the old tasklist
     $.each(data, function (id, task) {
-        $("#tblTasks tbody").append("<tr id=\"" + task.id + "\" class=\"taskRow\"></tr>");
+        $("#tblTasks tbody")
+                .append("<tr id='task_" + task.id + "' class=\"taskRow\"></tr>");
         $("#tblTasks tbody tr:last-child")
                 .append("<td>" + task.name + "</td>")
                 .append("<td>" + task.description + "</td>")
-                .append("<td>" + task.status + "</td>")
-                .append("<td>" + task.priority + "</td>");
-    });
+                .append("<td><select class='statussesSelect'></select></td>")
+                .append("<td><select class='prioritiesSelect'></select></td>")
+                .append("<td class='pencil'><img src='./assets/img/icon/edit.svg'/></td>");
 
-    //add event for taskrow.click
-    $(".taskRow").on("click", function () {
-        $("#taskId").val(this.id);
-        $("#taskName").val(this.childNodes[0].innerText);
-        $("#taskDescription").val(this.childNodes[1].innerText);
-        $("#taskStatus").val(this.childNodes[2].innerText);
-        $("#taskPriority").val(this.childNodes[3].innerText);
+        setStatussesSelectEvent(task, "statussesSelect")
+        setPrioritiesSelectEvent(task, "prioritiesSelect");
 
-        $("#addTaskModal").modal("open");
-
-        //edit-mode: all statuses can be selected
-        $("#taskStatus option").removeAttr("disabled");
-        $("#taskStatus").formSelect();
-
-        //call Materialize updateTextFields() after modal is shown to solve bug
-        //where the label of disabled fields is shown through the contents of the disabled field
-        M.updateTextFields();
-
-        $("#taskName").removeClass("invalid").focus();
+        $("#task_" + task.id + " .pencil").on("click", function () {
+            showDetailModal(task);
+        });
     });
 
     //add message to show when there are no projects
     if ($("#tblTasks tbody tr").length == 0) {
         $("#tblTasks tbody").append("<tr><td>No tasks found for this project</td><td></td><td></td><td></td></tr>");
     }
+}
+
+function setPrioritiesSelectEvent(task, className) {
+    var selectElement = $("#task_" + task.id + " ." + className);
+    addArrayToSelectAsOptions(priorities, selectElement);
+    $(selectElement).val(task.priority);
+    $(selectElement).formSelect();
+    $(selectElement).on("change", function () {
+        var formData = {
+            "op": "replace",
+            "path": "/priority",
+            "value": $(selectElement).val()
+        };
+        var url = backendBaseUrl + httpRequestParamaters.backendUrlTasks + "/" + task.id;
+        patch(url, formData, taskEditSuccess, taskEditError);
+    });
+}
+
+function setStatussesSelectEvent(task, className){
+        var selectElement = $("#task_" + task.id + " ." + className);
+        addArrayToSelectAsOptions(statusses, selectElement);
+        $(selectElement).val(task.status);
+        $(selectElement).formSelect();
+        $(selectElement).on("change", function () {
+            var formData = {
+                "op": "replace",
+                "path": "/status",
+                "value": $(selectElement).val()
+            };
+            var url = backendBaseUrl + httpRequestParamaters.backendUrlTasks + "/" + task.id;
+            patch(url, formData, taskEditSuccess, taskEditError);
+        });
+}
+
+function showDetailModal(task) {
+    $("#taskId").val(task.id);
+    $("#taskName").val(task.name);
+    $("#taskDescription").val(task.description);
+    $("#taskStatus").val(task.status);
+    $("#taskPriority").val(task.priority);
+
+    $("#addTaskModal").modal("open");
+
+    //edit-mode: all statuses can be selected
+    $("#taskStatus option").removeAttr("disabled");
+    $("#taskStatus").formSelect();
+
+    //call Materialize updateTextFields() after modal is shown to solve bug
+    //where the label of disabled fields is shown through the contents of the disabled field
+    M.updateTextFields();
+
+    $("#taskName").removeClass("invalid").focus();
 }
 
 function clearTaskList() {
@@ -194,9 +234,8 @@ function getStatusesAsOptions() {
 
 function setStatussesInSelect(response) {
     var selectelement = $("#taskStatus");
-    $.each(JSON.parse(response).taskStatuses, function (id, taskstatus) {
-        $(selectelement).append(new Option(taskstatus.name, taskstatus.name));
-    });
+    statusses = JSON.parse(response).taskStatuses;
+    addArrayToSelectAsOptions(statusses, selectelement);
 
     //if statuses found, enable add button and else select default status
     if ($(selectelement.selector + " option").length > 0) {
@@ -207,6 +246,12 @@ function setStatussesInSelect(response) {
     $(selectelement).formSelect();
 }
 
+function addArrayToSelectAsOptions(array, selectelement) {
+    $.each(array, function (id, element) {
+        $(selectelement).append(new Option(element.name, element.name));
+    });
+}
+
 function getStatussesError() {
     //getting projects failed: disable add button
     $("#addTaskModalTrigger").addClass("disabled");
@@ -214,16 +259,15 @@ function getStatussesError() {
     //      clicking on the Save button will still catch the error
 }
 
-function getPrioritiesAsOptions(selectelement) {
+function getPrioritiesAsOptions() {
     var url = backendBaseUrl + httpRequestParamaters.backendUrlPriorities;
     get(url, setPrioritiesInSelect, getPrioritiesError);
 }
 
 function setPrioritiesInSelect(response) {
     var selectelement = $("#taskPriority");
-    $.each(JSON.parse(response).projectStatuses, function (id, priority) {
-        $(selectelement).append(new Option(priority.name, priority.name));
-    });
+    priorities = JSON.parse(response).priorities;
+    addArrayToSelectAsOptions(priorities, selectelement);
 
     //if priorities found, enable add button and else select default priority
     if ($(selectelement.selector + " option").length > 0) {
