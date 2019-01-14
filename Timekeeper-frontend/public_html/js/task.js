@@ -143,7 +143,8 @@ function displayTasks(data) {
                 .append("<td>" + task.description + "</td>")
                 .append("<td><select class='statussesSelect'></select></td>")
                 .append("<td><select class='prioritiesSelect'></select></td>")
-                .append("<td class='pencil'><img src='./assets/img/icon/edit.svg'/></td>");
+                .append("<td class='pencil'><img src='./assets/img/icon/edit.svg'/></td>")
+                .append("<td class='trashcan'><img src='./assets/img/icon/delete.svg'/></td>");
 
         setStatussesSelectEvent(task, "statussesSelect")
         setPrioritiesSelectEvent(task, "prioritiesSelect");
@@ -151,12 +152,44 @@ function displayTasks(data) {
         $("#task_" + task.id + " .pencil").on("click", function () {
             showDetailModal(task);
         });
+        $("#task_" + task.id + " .trashcan").on("click", function () {
+            confirmDeleteTask(task.id);
+        });
     });
 
     //add message to show when there are no projects
     if ($("#tblTasks tbody tr").length == 0) {
-        $("#tblTasks tbody").append("<tr><td>No tasks found for this project</td><td></td><td></td><td></td></tr>");
+        $("#tblTasks tbody").append("<tr><td colspan=\"6\">No tasks found for this project</td></tr>");
     }
+}
+
+function confirmDeleteTask(taskId) {
+    $("#deleteTaskModal").modal("open");
+
+    $("#btnDeleteTask").on("click", function () {
+        deleteTask(taskId);
+        closeDeleteTaskModal();
+    });
+}
+
+function taskDeleteSucces() {
+    snackbar("Task deleted!");
+    getTasksForProject($("#taskProjectId").val(), displayTasks);
+}
+
+function taskDeleteError() {
+    closeDeleteTaskModal();
+    snackbar("Task could not be deleted, try again!");
+}
+
+function deleteTask(taskId) {
+    var url = backendBaseUrl + httpRequestParamaters.backendUrlTasks + "/" + taskId;
+    remove(url, taskDeleteSucces, taskDeleteError);
+}
+
+function closeDeleteTaskModal() {
+    $("#deleteTaskModal").modal("close");
+    $("#btnDeleteTask").off();
 }
 
 function setPrioritiesSelectEvent(task, className) {
