@@ -48,10 +48,10 @@ function clearForm() {
     $("#projectName").val("").removeClass("invalid");
     $("#projectDescription").val("");
     $("#projectDueDate").val("").removeClass("invalid");
+    $("#projectAddFailedMessage").hide();
 }
 
 function getProjects(cb) {
-    console.log("get projects");
     var url = backendBaseUrl + httpRequestParamaters.backendUrlProjects;
     get(url, cb, getProjectsError);
 }
