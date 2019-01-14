@@ -51,6 +51,7 @@ function clearForm() {
 }
 
 function getProjects(cb) {
+    console.log("get projects");
     var url = backendBaseUrl + httpRequestParamaters.backendUrlProjects;
     get(url, cb, getProjectsError);
 }
@@ -184,7 +185,11 @@ function confirmDelete(projectId, projectStatus) {
             deleteProject(projectId);
             closeDeleteModal();
         }
-    })
+    });
+
+    $("#btnButtonCancelDelete").on("click", function(){
+       closeDeleteModal();
+    });
 }
 
 function secondConfirmationDelete(projectId) {
@@ -194,7 +199,7 @@ function secondConfirmationDelete(projectId) {
     $("#deleteDoneProject").on("click", function () {
         deleteProject(projectId);
         $("#deleteDoneProjectModal").modal("close");
-    })
+    });
 }
 
 function showSnackbar(message) {
