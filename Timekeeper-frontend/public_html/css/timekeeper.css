@@ -228,7 +228,7 @@ nav{
 }
 
 @-webkit-keyframes fadein {
-    from {bottom: 0; opacity: 0;} 
+    from {bottom: 0; opacity: 0;}
     to {bottom: 30px; opacity: 1;}
 }
 
@@ -238,7 +238,7 @@ nav{
 }
 
 @-webkit-keyframes fadeout {
-    from {bottom: 30px; opacity: 1;} 
+    from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
 }
 
@@ -246,6 +246,43 @@ nav{
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
 }
+
+  p{
+    font-style: italic;
+  }
+  .loader{
+    text-align: center;
+    position:absolute;
+    z-index:9999;
+    position: absolute;
+     top: 50%;
+     left: 50%;
+     margin: -40px 0px 0px -40px;
+  }
+
+  /*
+    Set the color of the icon
+  */
+  /*
+  svg path,
+  svg rect{
+    fill: #FF6700;
+  }*/
+
+  #loader-1{
+      width: 100px;
+      height: 100px;
+  }
+
+  .loader-overlay {
+    z-index: 9998;
+    height: 100%;
+    width: 100%;
+    background: transparent;
+    left: 0;
+    top: 0;
+    position: fixed;
+   }
 
 /*
 * font

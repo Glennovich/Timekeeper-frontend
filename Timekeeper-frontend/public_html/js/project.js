@@ -52,6 +52,7 @@ function clearForm() {
 }
 
 function getProjects(cb) {
+    turnBusyIndicatorOn();
     var url = backendBaseUrl + httpRequestParamaters.backendUrlProjects;
     get(url, cb, getProjectsError);
 }
@@ -83,6 +84,8 @@ function displayProjects(response) {
             confirmDelete(project.id);
         });
     });
+
+    turnBusyIndicatorOff();
 }
 
 function initializeFieldsForDisplay(project) {
@@ -104,6 +107,7 @@ function refreshProjects() {
 
 
 function saveProject() {
+    turnBusyIndicatorOn();
     if ($("#projectName").val().replace(/ /g, '') === "") {
         $("#projectName").val("");
     }
@@ -145,6 +149,7 @@ function projectUpdateSuccess() {
     closeAddModal();
     showSnackbar("Project updated!");
     refreshProjects();
+    turnBusyIndicatorOff();
 }
 
 function clearInputFields() {
@@ -156,16 +161,19 @@ function projectSaveError() {
 }
 
 function deleteProject(projectId) {
+    turnBusyIndicatorOn();
     var url = backendBaseUrl + httpRequestParamaters.backendUrlProject + "/" + projectId;
     remove(url, projectDeleteSucces, projectDeleteError);
 }
 
 function projectDeleteSucces() {
+    turnBusyIndicatorOff();
     showSnackbar("Project deleted!");
     refreshProjects();
 }
 
 function projectDeleteError() {
+    turnBusyIndicatorOff();
     closeDeleteModal();
     showSnackbar("Project could not be deleted, try again!");
 }
