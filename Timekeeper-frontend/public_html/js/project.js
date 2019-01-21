@@ -58,7 +58,10 @@ function getProjects(cb) {
 }
 
 function getProjectsError() {
-    $("#addProjectModalTrigger").addClass("disabled");
+    //$("#addProjectModalTrigger").addClass("disabled");
+    turnBusyIndicatorOff();
+    $("#tblProjects tbody")
+    .append("<tr><td></td><td>Projects could not be loaded</td><td></td><td></td><td></td><td></td><td></td></tr>")
 }
 
 function displayProjects(response) {
