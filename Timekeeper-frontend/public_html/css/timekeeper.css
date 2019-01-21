@@ -280,7 +280,7 @@ nav{
     width: 100%;
     background: transparent;
     left: 0;
-    top: 0;
+    top: 64px;
     position: fixed;
    }
 
