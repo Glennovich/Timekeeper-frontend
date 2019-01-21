@@ -160,6 +160,7 @@ function clearInputFields() {
 }
 
 function projectSaveError() {
+    turnBusyIndicatorOff();
     $("#projectAddFailedMessage").show();
 }
 
