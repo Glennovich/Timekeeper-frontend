@@ -13,10 +13,6 @@ $(document).ready(function () {
     $(".modal").modal();
 
     initializeEventHandlers();
-
-    setTimeout(() => {
-        $("#taskProjectId").trigger("change");
-    }, 300);
 });
 
 function initializeEventHandlers() {
@@ -55,22 +51,11 @@ function initializeEventHandlers() {
     });
 
     $("#taskProjectId").on("change", function () {
-        if ($("#taskProjectId")[0].selectedIndex === -1) {
-            //This bug appears when the server shuts down and restarts, and then we refresh the page. 
-            //The select of the projects seems to loose all it's data. This is a temporary fix until the real problem is found.
-            setTimeout(() => {
-                getProjectsAsOptions();
-                $("#taskProjectId")[0].selectedIndex = 0;
-                //save current projectId
-                timekeeperStorage.setItem("taskProjectId", $("#taskProjectId").val());
-
-                getTasksForProject($("#taskProjectId").val(), displayTasks);
-                updateTaskProject();
-            }, 1000);
-        } else {
+        //this event may sometimes fire even if no project is selected, causing null to be passed to getTasksForProject
+        //only execute the following code if we have a selected project
+        if($("#taskProjectId").val()){
             //save current projectId
             timekeeperStorage.setItem("taskProjectId", $("#taskProjectId").val());
-
             getTasksForProject($("#taskProjectId").val(), displayTasks);
             updateTaskProject();
         }
@@ -101,14 +86,13 @@ function setProjectsInSelect(response) {
             $(selectelement).val(selectedTaskProjectId);
         }
     }
-
+    
+    //this will trigger the getTasksForProject to execute, thus removing the need for a call to getTasksForProject here
+    $(selectelement).trigger("change");
+    
     updateTaskProject();
 
     $(selectelement).formSelect();//must be done after dynamically adding option elements/changing the selected value or lay-out will suck
-
-    //initialize list of tasks for the currently selected (first) project of the list
-    getTasksForProject($(selectelement).val());
-
 }
 
 function getProjectsError() {
@@ -118,19 +102,21 @@ function getProjectsError() {
     //      clicking on the Save button will still catch the error
 }
 
-
-
 function updateTaskProject() {
     //fill in project name in taskProject input field in modal form
     $("#taskProject").val($("#taskProjectId option:selected").text());
 }
 
 function getTasksForProject(projectId, cb) {
-    var url = backendBaseUrl + httpRequestParamaters.backendUrlTasksFromProject + "/" + projectId;
-    get(url, function (result) {
-        $("#addProjectModalTrigger").removeClass("disabled");
-        cb(JSON.parse(result));
-    });
+    //Only execute request if projectId is not null. Sometimes, when the db has just been restarted the system
+    //will try to do getTasksForProject(null,cb) which causes a list of undefined tasks to appear
+    if(projectId){
+        var url = backendBaseUrl + httpRequestParamaters.backendUrlTasksFromProject + "/" + projectId;
+        get(url, function (result) {
+            $("#addProjectModalTrigger").removeClass("disabled");
+            cb(JSON.parse(result));
+        });
+    }
 }
 
 function displayTasks(data) {
@@ -146,7 +132,7 @@ function displayTasks(data) {
                 .append("<td class='pencil'><img src='./assets/img/icon/edit.svg'/></td>")
                 .append("<td class='trashcan'><img src='./assets/img/icon/delete.svg'/></td>");
 
-        setStatussesSelectEvent(task, "statussesSelect")
+        setStatussesSelectEvent(task, "statussesSelect");
         setPrioritiesSelectEvent(task, "prioritiesSelect");
 
         $("#task_" + task.id + " .pencil").on("click", function () {
