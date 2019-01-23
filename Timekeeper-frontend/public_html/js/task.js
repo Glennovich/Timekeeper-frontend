@@ -129,6 +129,7 @@ function displayTasks(data) {
                 .append("<td>" + task.description + "</td>")
                 .append("<td><select class='statussesSelect'></select></td>")
                 .append("<td><select class='prioritiesSelect'></select></td>")
+                .append("<td class='play'><img src='./assets/img/icon/play.svg'/></td>")
                 .append("<td class='pencil'><img src='./assets/img/icon/edit.svg'/></td>")
                 .append("<td class='trashcan'><img src='./assets/img/icon/delete.svg'/></td>");
 
@@ -145,7 +146,7 @@ function displayTasks(data) {
 
     //add message to show when there are no projects
     if ($("#tblTasks tbody tr").length == 0) {
-        $("#tblTasks tbody").append("<tr><td colspan=\"6\">No tasks found for this project</td></tr>");
+        $("#tblTasks tbody").append("<tr><td colspan=\"7\">No tasks found for this project</td></tr>");
     }
 }
 
