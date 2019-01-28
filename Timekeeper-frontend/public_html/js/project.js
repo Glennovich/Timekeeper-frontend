@@ -61,13 +61,14 @@ function getProjectsError() {
     //$("#addProjectModalTrigger").addClass("disabled");
     turnBusyIndicatorOff();
     $("#tblProjects tbody")
-    .append("<tr><td></td><td>Projects could not be loaded</td><td></td><td></td><td></td><td></td><td></td></tr>")
+    .append("<tr><td></td><td>Projects could not be loaded</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>")
 }
 
 function displayProjects(response) {
     $("#addProjectModalTrigger").removeClass("disabled");
     $.each(JSON.parse(response), function (id, project) {
         initializeFieldsForDisplay(project);
+        
         $("#tblProjects tbody")
                 .append("<tr class='clickable-row projectRow' id='project_" + project.id + "'></tr>");
         $("#tblProjects tbody tr:last-child")
@@ -76,8 +77,8 @@ function displayProjects(response) {
                 .append("<td>" + project.description + "</td>")
                 .append("<td>" + project.status + "</td>")
                 .append("<td>" + project.deadLine + "</td>")
-                .append("<td>" + project.numberOfTasks + "</td>")
                 .append("<td class='pencil'><img src='./assets/img/icon/edit.svg'/></td>")
+                        .append("<td class='goto'><img title='" + project.numberOfTasks + " task(s)' src='./assets/img/icon/" + determineIcon(project.numberOfTasks) + ".svg'/></td>")
                 .append("<td class='trashcan'><img src='./assets/img/icon/delete.svg'/></td>");
 
         $("#project_" + project.id + " .pencil").on("click", function () {
@@ -85,6 +86,10 @@ function displayProjects(response) {
         });
         $("#project_" + project.id + " .trashcan").on("click", function () {
             confirmDelete(project.id);
+        });
+        
+        $("#project_" + project.id + " .goto").on("click", function () {
+            goToProjectDetail(project.id);
         });
     });
 
@@ -98,6 +103,15 @@ function initializeFieldsForDisplay(project) {
     if (project.status == undefined) {
         project.status = "";
     }
+}
+
+function determineIcon(numberOfTasks){
+    var icon = "empty-folder";
+    if(numberOfTasks != "0"){
+        icon = "search-in-folder";
+    }
+    
+    return icon;
 }
 
 function refreshProjects() {
@@ -259,4 +273,10 @@ function fillInModalFields(project) {
     $("#projectDescription").val(project.description);
     $("#projectDueDate").val(project.deadLine);
     $("#projectStatus").val(project.status);
+}
+
+function goToProjectDetail(projectId){
+    //set the id of the project in local storage
+    localStorage.setItem("taskProjectId", projectId);
+    window.location.href = "./tasks.html";
 }
