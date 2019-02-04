@@ -125,8 +125,8 @@ function displayTasks(data) {
         $("#tblTasks tbody")
                 .append("<tr id='task_" + task.id + "' class=\"taskRow\"></tr>");
         $("#tblTasks tbody tr:last-child")
-                .append("<td>" + task.name + "</td>")
-                .append("<td>" + task.description + "</td>")
+                .append("<td>" + task.name.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</td>")
+                .append("<td>" + task.description.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</td>")
                 .append("<td><select class='statussesSelect'></select></td>")
                 .append("<td><select class='prioritiesSelect'></select></td>")
                 .append("<td class='play'><img src='./assets/img/icon/play.svg'/></td>")
