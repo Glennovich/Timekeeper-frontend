@@ -105,6 +105,14 @@ nav{
     background-color: #26a69a;
 }
 
+.isDisabled {
+    pointer-events: none;
+}
+
+.isDisabled a{
+    color: lightgray;
+}
+
 
 
 
