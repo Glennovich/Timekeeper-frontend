@@ -1,29 +1,37 @@
 var t;
 var seconds = 0, minutes = 0, hours = 0;
+var isRunning = false;
 
 $(document).ready(function(){
     //event listeners
     $("#startTimer").on("click", function(){
+        if(!isRunning){
         //disable menu
-        disableMenu();
-        t = setTimeout(timer, 1000);
+            disableMenu();
+            isRunning = true;
+            t = setTimeout(timer, 1000);
+        }
     });
 
     $("#stopTimer").on("click", function(){
-        //enable menu
-        enableMenu();
-        clearTimeout(t);
+        if(isRunning){
+            //enable menu
+            enableMenu();
+            isRunning = false;
+            clearTimeout(t);
+        }
     });
 
     //set the timer back to 00:00:00
     $("#resetTimer").on("click", function(){
-        //enable menu
-        enableMenu();
-        clearTimeout(t);
-        seconds = 0;
-        minutes = 0;
-        hours = 0;
-        $("#timer").text("00:00:00");
+            //enable menu
+            enableMenu();
+            isRunning = false;
+            clearTimeout(t);
+            seconds = 0;
+            minutes = 0;
+            hours = 0;
+            $("#timer").text("00:00:00");
     });
 });
 
