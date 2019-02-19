@@ -1,0 +1,28 @@
+@font-face {
+    font-family: digitalFont;
+    src: url("../fonts/digital_dismay.otf");
+}
+
+#timer{
+    color: #333;
+    grid-column: 1 / 4;
+    text-align: center;
+    font-family: digitalFont; 
+    font-size: 120px;
+}
+
+#startTimer{
+    grid-column: 1 / 2;
+}
+#stopTimer{
+    grid-column: 2 / 3;
+}
+#resetTimer{
+    grid-column: 3 / 4;
+}
+.title-container{
+    width: 450px;
+    margin-left: 100px;
+    grid-template-columns: 140px 140px 140px;
+    grid-template-rows: 110px 50px;
+}

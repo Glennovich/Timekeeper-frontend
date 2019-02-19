@@ -1,0 +1,40 @@
+.separationLine{
+    grid-column: 1 / 7;
+}
+body{
+    width: 100%;
+}    
+.title-container, .table-body, .table-head{
+    margin: 40px 50px;
+}
+.title-container{
+    margin-top: 80px;
+    grid-template-columns: 200px 80px 200px;
+    grid-template-rows: 50px 25px auto;
+}
+.table-body, .table-head{
+    width: 100%;
+    grid-template-columns: auto 150px 150px 40px 40px 40px;
+}
+.medium-screen-hidden{
+    display: none;
+}
+.small-screen-hidden{
+    display: block;
+}
+.modal-window form{
+    grid-template-columns: 150px 400px;
+    grid-template-rows: 35px 150px 35px 50px 35px;
+    margin-top: 10px;
+}
+
+.modal-buttons{
+    margin-left: 450px;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+.modal-window form span{
+    padding-top: 7px;
+    justify-self: right;
+    font-weight: bold;
+}

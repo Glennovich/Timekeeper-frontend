@@ -13,26 +13,27 @@
  */
 
 function get(url, functionOnSucces, functionOnError) {
-    createRequestWithoutPayload('GET', url, functionOnSucces, functionOnError)
+    createRequestWithoutPayload('GET', url, functionOnSucces, functionOnError, 1);
 }
 
 function remove(url, functionOnSucces, functionOnError) {
-    createRequestWithoutPayload('DELETE', url, functionOnSucces, functionOnError)
+    createRequestWithoutPayload('DELETE', url, functionOnSucces, functionOnError, 2);
 }
 
 function put(url, payload, functionOnSucces, functionOnError) {
-    createRequestWithPayload('PUT', url, payload, functionOnSucces, functionOnError)
+    createRequestWithPayload('PUT', url, payload, functionOnSucces, functionOnError, 3);
 }
 
 function post(url, payload, functionOnSucces, functionOnError) {
-    createRequestWithPayload('POST', url, payload, functionOnSucces, functionOnError)
+    createRequestWithPayload('POST', url, payload, functionOnSucces, functionOnError, 4);
 }
 
 function patch(url, payload, functionOnSucces, functionOnError) {
-    createRequestWithPayload('PATCH', url, payload, functionOnSucces, functionOnError)
+    createRequestWithPayload('PATCH', url, payload, functionOnSucces, functionOnError, 5);
 }
 
-function createRequestWithoutPayload(typeOfRequest, url, functionOnSucces, functionOnError) {
+function createRequestWithoutPayload(typeOfRequest, url, functionOnSucces, functionOnError, test) {
+    turnBusyIndicatorOn();
     var xhr = createCORSRequest(typeOfRequest, url);
     if (!xhr) {
         console.log('CORS not supported');
@@ -43,6 +44,7 @@ function createRequestWithoutPayload(typeOfRequest, url, functionOnSucces, funct
 }
 
 function createRequestWithPayload(typeOfRequest, url, payload, functionOnSucces, functionOnError) {
+    turnBusyIndicatorOn();
     var xhr = createCORSRequest(typeOfRequest, url);
     if (!xhr) {
         console.log('CORS not supported');
@@ -68,6 +70,7 @@ function setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError) {
                 return;
             }
             try {
+                turnBusyIndicatorOff();
                 functionOnSucces(xhr.response);
             } catch (e) {
             }
@@ -77,6 +80,7 @@ function setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError) {
     xhr.onerror = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             try {
+                turnBusyIndicatorOff();
                 functionOnError(xhr.response);
             } catch (e) {
             }

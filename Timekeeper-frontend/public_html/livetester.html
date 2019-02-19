@@ -1,63 +1,58 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Timekeeper. A simple time tracking tool that helps you track time on your projects. Once you start using it, you'll realize that this tool is a keeper, a timekeeper.">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Timekeeper - Livetester</title>
+        <title>Timekeeper - Tasks</title>
+        <meta name="description" content="Timekeeper. A simple time tracking tool that helps you track time on your projects. Once you start using it, you'll realize that this tool is a keeper, a timekeeper.">
 
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href="css/timekeeper.css">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+        <link rel="stylesheet" href="css/default.css">
 
-    <script src="js/vendor/modernizr-2.8.3.min.js"></script>
-    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
-    <script src="js/config.js"></script>
-    <script src="js/plugins.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/livetester.js"></script>
-</head>
+        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
+        <script src="js/config.js"></script>
+        <script src="js/common.js"></script>
+        <script src="js/requests.js"></script>
+        <script src="js/livetester.js"></script>
+    </head>
 
-<body>
-    <nav>
-        <div class="nav-wrapper">
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-            <ul class="left hide-on-med-and-down">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="projects.html">Projects</a></li>
-                <li><a href="tasks.html">Tasks</a></li>
-                <li><a href="livetester.html">Livetester</a></li>
-            </ul>
+    <body>
+        <nav>
+            <div>
+                <ul class="menu-bar">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="tasks.html">Tasks</a></li>
+                    <li><a href="livetester.html">Livetester</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="title-container static">
+            <h1>Livetester</h1>
         </div>
-    </nav>
-
-    <ul class="sidenav" id="mobile-demo">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="projects.html">Projects</a></li>
-        <li><a href="tasks.html">Tasks</a></li>
-        <li><a href="livetester.html">Livetester</a></li>
-    </ul>
-    <div class="container">
-        <table id="tblLivetester">
-            <thead>
-                <tr>
-                    <th>
-                        Time
-                    </th>
-                    <th>
-                        Result
-                    </th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-</body>
+        <div class="table-head static">
+            <span>Time</span>
+            <span>Result</span>
+            <div class="separationLine"></div>
+        </div>
+        <div class="table-body">
+        </div>
+        <div class="loader close" hidden>
+            <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                 x="0px" y="0px" width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;"
+                 xml:space="preserve">
+            <path fill="#26a69a" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+            <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25"
+                              dur="0.6s" repeatCount="indefinite" />
+            </path>
+            </svg>
+            <div class="loader-overlay"></div>
+        </div>    
+    </body>
 
 </html>

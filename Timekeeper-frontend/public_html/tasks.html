@@ -1,167 +1,108 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Timekeeper - Tasks</title>
-    <meta name="description" content="Timekeeper. A simple time tracking tool that helps you track time on your projects. Once you start using it, you'll realize that this tool is a keeper, a timekeeper.">
+        <title>Timekeeper - Tasks</title>
+        <meta name="description" content="Timekeeper. A simple time tracking tool that helps you track time on your projects. Once you start using it, you'll realize that this tool is a keeper, a timekeeper.">
 
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href="css/timekeeper.css">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+        <link rel="stylesheet" href="css/default.css">
+        <link rel="stylesheet" media="screen and (min-width: 0px)" href="css/task-small.css">
+        <link rel="stylesheet" media="screen and (min-width: 760px)" href="css/task-medium.css">
+        <link rel="stylesheet" media="screen and (min-width: 1020px)" href="css/task-large.css">
 
-    <script src="js/vendor/modernizr-2.8.3.min.js"></script>
-    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
-    <script src="js/config.js"></script>
-    <script src="js/plugins.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/busyIndicator.js"></script>
-    <script src="js/task.js"></script>
-    <script src="js/requests.js"></script>
-</head>
+        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
+        <script src="js/config.js"></script>
+        <script src="js/task.js"></script>
+        <script src="js/common.js"></script>
+        <script src="js/requests.js"></script>
+    </head>
 
-<body>
-    <nav>
-        <div class="nav-wrapper">
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-            <ul class="left hide-on-med-and-down">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="projects.html">Projects</a></li>
-                <li><a href="tasks.html">Tasks</a></li>
-                <li><a href="livetester.html">Livetester</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <!--loading icon-->
-    <div class="loader loader--style3" hidden>
-        <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-            x="0px" y="0px" width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;"
-            xml:space="preserve">
-            <path fill="#26a69a" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
-                <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25"
-                    dur="0.6s" repeatCount="indefinite" />
-            </path>
-        </svg>
-        <div class="loader-overlay"></div>
-    </div>
-
-    <ul class="sidenav" id="mobile-demo">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="projects.html">Projects</a></li>
-        <li><a href="tasks.html">Tasks</a></li>
-        <li><a href="livetester.html">Livetester</a></li>
-    </ul>
-    <div class="container">
-        <div class="row">
-            <div class="col s1">
-                <h4>Tasks</h4>
+    <body>
+        <nav>
+            <div>
+                <ul class="menu-bar">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="tasks.html">Tasks</a></li>
+                    <li><a href="livetester.html">Livetester</a></li>
+                </ul>
             </div>
-            <div class="col s2">
-                <button style="margin-top: 27px; margin-left:30px;" data-target="addTaskModal" class="btn modal-trigger disabled"
-                    id="addTaskModalTrigger">Add</button>
-            </div>
+        </nav>
+        <div class="title-container static">
+            <h1>Tasks</h1>
+            <input class="default-button" type="button" id="btnAddTask" value="Add"/>
+            <h4>from project</h4>
+            <select id="selectProjects" name="selectProjects"></select>
         </div>
-        <div class="row">
-            <div class="input-field col s12">
-                <select id="taskProjectId" name="taskProjectId"></select>
-                <label for="taskProjectId">from project: </label>
-            </div>
+        <div class="table-head static">
+            <span>Name</span>
+            <span class="medium-screen-hidden">Description</span>
+            <span class="small-screen-hidden">Status</span>
+            <span class="small-screen-hidden">Priority</span>
+            <span></span>
+            <span></span>
+            <div class="separationLine"></div>
         </div>
-        <div class="row">
-            <table id="tblTasks">
-                <thead>
-                    <tr>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Description
-                        </th>
-                        <th>
-                            Status
-                        </th>
-                        <th>
-                            Priority
-                        </th>
-                        <th>
-                        </th>
-                        <th>
-                        </th>
-                        <th>
-                        </th>
-                     </tr>
-                </thead>
-                <tbody>
-
-                </tbody>
-            </table>
+        <div class="table-body">
         </div>
 
-        <!--Modal dialog to add a task-->
-        <div id="addTaskModal" class="modal">
+        <div id="addTaskModal" class="modal-window close" hidden>
             <div class="modal-content">
-                <div class="row">
-                    <span id="taskAddFailedMessage" class="red-text"></span>
+                <div>
+                    <form id="formAddTask">
+                        <input type="hidden" id="taskId" name="taskId" value=""/>
+
+                        <span>Project</span>
+                        <input type="text" id="taskProject" disabled>
+
+                        <span>Task</span>
+                        <input type="text" id="taskName" name="taskName" required>
+
+                        <span>Description</span>
+                        <textarea id="taskDescription" name="taskDescription"></textarea>
+
+                        <span>Status</span>
+                        <select id="taskStatus" name="taskStatus"></select>
+
+                        <span>Priority</span>
+                        <select id="taskPriority" name="taskPriority"></select>
+                    </form>
                 </div>
-                <form id="formAddTask">
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <input type="hidden" id="taskId" name="taskId" value=""/>
-                            <input type="text" id="taskProject" disabled>
-                            <label for="taskProject">Project: </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <input type="text" id="taskName" name="taskName" class="validate" aria-required="true" required placeholder="name of the task">
-                            <label for="taskName">Task: </label>
-                            <span class="helper-text" data-error="Taskname is required"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <textarea id="taskDescription" name="taskDescription" placeholder="description for the task" class="materialize-textarea"></textarea>
-                            <label for="taskDescription">Description: </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <select id="taskStatus" name="taskStatus"></select>
-                            <label for="taskStatus">Status: </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <select id="taskPriority" name="taskPriority"></select>
-                            <label for="taskPriority">Priority: </label>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <a id="cancelTask" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
-                <button id="saveTask" class="waves-effect waves-green btn-flat" type="submit">Save</button>
+                <div class="modal-buttons">
+                    <a id="btnCancelTask" class="clickable">CANCEL</a>
+                    <a id="btnSaveTask" class="clickable">SAVE</a>
+                </div>
             </div>
         </div>
-        <!--Modal to confirm delete of a task-->
-        <div id="deleteTaskModal" class="modal">
+        <div id="confirmDeleteModal" class="modal-window close" hidden>
             <div class="modal-content">
-                ARE YOU SURE YOU WANT TO DELETE THIS TASK?
-            </div>
-            <div class="modal-footer">
-                <button class="modal-close waves-effect waves-green btn-flat" type="submit">NO</button>
-                <button id="btnDeleteTask" class="waves-effect waves-green btn-flat" type="submit">YES</button>
+                <div>
+                    <span>ARE YOU SURE YOU WANT TO DELETE THIS TASK?</span>
+                </div>
+                <div class="modal-buttons">
+                    <a id="btnCancelDelete" class="clickable">CANCEL</a>
+                    <a id="btnConfirmDelete" class="clickable">OK</a>
+                </div>
             </div>
         </div>
-    </div>
-    <div id="snackbar"></div>
-</body>
-
+        <div id="snackbar"></div>
+        <!--loading icon-->
+        <div class="loader close" hidden>
+            <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                 x="0px" y="0px" width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;"
+                 xml:space="preserve">
+            <path fill="#26a69a" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+            <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25"
+                              dur="0.6s" repeatCount="indefinite" />
+            </path>
+            </svg>
+            <div class="loader-overlay"></div>
+        </div>    
+    </body>
 </html>

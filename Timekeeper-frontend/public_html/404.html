@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head>
+    <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="description" content="Timekeeper. A simple time tracking tool that helps you track time on your projects. Once you start using it, you'll realize that this tool is a keeper, a timekeeper.">
@@ -8,21 +8,20 @@
         <title>Timekeeper - Page not found</title>
 
         <link rel="icon" href="favicon.ico" type="image/x-icon">
-        <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" href="css/materialize.css">
-        <link rel="stylesheet" href="css/timekeeper.css">
+        <link rel="stylesheet" href="css/default.css">
+        <link rel="stylesheet" href="css/index-small.css">
 
-        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
         <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
+        <script src="js/common.js"></script>
+        <script src="js/timer.js"></script>
         <style>
             #content{
                 border-radius: 15px;
                 box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
                 padding: 25px;
-                width: 600px;
-                height: 350px;
+                width: 350px;
+                height: 200px;
                 background: white;
                 text-align: center;
                 margin: auto;
@@ -32,15 +31,15 @@
                 bottom: 0;
                 right: 0;
             }
-
-         </style>
-
-</head>
-<body>
+            #content *{
+                padding-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
         <nav>
-            <div class="nav-wrapper">
-                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-                <ul class="left hide-on-med-and-down">
+            <div>
+                <ul class="menu-bar">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="projects.html">Projects</a></li>
                     <li><a href="tasks.html">Tasks</a></li>
@@ -48,18 +47,10 @@
                 </ul>
             </div>
         </nav>
-
-        <ul class="sidenav" id="mobile-demo">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="projects.html">Projects</a></li>
-            <li><a href="tasks.html">Tasks</a></li>
-            <li><a href="livetester.html">Livetester</a></li>
-        </ul>
-        <div id='content'>
-
+         <div id='content'>
             <h1>Page not found</h1>
             <p>It seems that the page that you're trying to access does not exist</p>
             <p>Please contact your administrator</p>
-
-        </div></body>
+        </div>
+    </body>
 </html>
