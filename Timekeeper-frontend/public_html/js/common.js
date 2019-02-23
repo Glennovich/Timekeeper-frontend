@@ -44,6 +44,7 @@ function closeModal(modal) {
 }
 
 function snackbar(text, error) {
+    //TODO remove class error
     var snackbar = $("#snackbar");
     $(snackbar).html(text);
     $(snackbar).addClass("show");
@@ -53,22 +54,22 @@ function snackbar(text, error) {
 }
 
 function showStaticContent() {
-    buidUp($(".static"), 100);
+    buildUp($(".static"), 100);
 }
 
 function showTableRows() {
-    buidUp($(".table-body > *"), 5);
+    buildUp($(".table-body > *"), 5);
 }
 
 function clearTable(callback) {
-    var timeNeededToComplete = buidDown($(".table *"), 1);
+    var timeNeededToComplete = buildDown($(".table *"), 1);
     setTimeout(() => {
         $(".table-body *").remove();
         callback && callback();
     }, timeNeededToComplete);
 }
 
-function buidUp(arrayOfElements, delay) {
+function buildUp(arrayOfElements, delay) {
     if (arrayOfElements && arrayOfElements.length > 0) {
         var startDelay = delay;
         arrayOfElements.each((id, element) => {
@@ -83,7 +84,7 @@ function buidUp(arrayOfElements, delay) {
  * @param {type} delay
  * @returns total time needed to complete the last animation
  */
-function buidDown(arrayOfElements, delay) {
+function buildDown(arrayOfElements, delay) {
     if (arrayOfElements && arrayOfElements.length > 0) {
         var startDelay = delay;
         $($(arrayOfElements).get().reverse()).each((id, element) => {
@@ -134,9 +135,12 @@ function unbindSecondDeleteModalButtons() {
 }
 
 function disableElement(node, disable) {
-    $(node).attr("disabled", disable);
     if (disable)
-        $(node).addClass("disabled");
+        $(node)
+            .attr("disabled", "disabled")
+            .addClass("disabled");
     else
-        $(node).removeClass("disabled");
+        $(node)
+            .removeClass("disabled")
+            .removeAttr("disabled");
 }

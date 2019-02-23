@@ -40,6 +40,7 @@ function createRequestWithoutPayload(typeOfRequest, url, functionOnSucces, funct
         return;
     }
     setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError);
+    xhr.setRequestHeader("token", "nhcuyfyouvxjxtmmvnlnvruohdqiwgzlmozrhoyhuyankakswhszgsaihqkyyfizvyvbsrjtqrnonmpzcmdsumesarpspdkecymrhszbtcaddtwwbbgsiqawpptuinzu");
     xhr.send();
 }
 
@@ -51,6 +52,7 @@ function createRequestWithPayload(typeOfRequest, url, payload, functionOnSucces,
         return;
     }
     setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError);
+    xhr.setRequestHeader("Token", "sdfsf");
     xhr.send(JSON.stringify(payload));
 }
 
@@ -81,7 +83,8 @@ function setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError) {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             try {
                 turnBusyIndicatorOff();
-                functionOnError(xhr.response);
+                if(xhr.status == 0) connectionLostProcedure()
+                else functionOnError(xhr.response);
             } catch (e) {
             }
         }
@@ -89,3 +92,19 @@ function setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError) {
     }
 }
 
+function connectionLostProcedure(){
+    $.each(".title-container *", (i, el) => disableElement(el, true));
+            
+    snackbar("A connection error occured, please try again later!", true);
+    //var interval = setInterval(checkServiceLive(interval => clearInterval(interval)), 1000);
+
+}
+
+function reconnectionProcedure(){
+    $(".title-container *").addClass("disabled");
+    snackbar("A connection error occured, please try again later!", true);
+}
+
+function checkServiceLive(stopFunction){
+    get(backendBaseUrl + "live", stopFunction);
+}

@@ -217,7 +217,6 @@ function addArrayToSelectAsOptions(array, selectelement) {
 
 function getStatussesError() {
     $("#btnAddTask").addClass("disabled"); 
-    snackbar("A connection error occured, please try again later!", true);
 }
 
 function getPrioritiesError() {
@@ -324,23 +323,19 @@ function showDetailModal(task) {
 
 function confirmDeleteTask(task) {
     openConfirmDeleteModal(() => deleteTask(task.id));
-    console.log("confirmDeleteTask");
 }
 
 function taskDeleteSucces() {
-    console.log("taskDeleteSucces");
     getTasksForProject($("#selectProjects").val(), 6);
     snackbar("Task deleted!");
 }
 
 function taskDeleteError() {
-    console.log("taskDeleteError");
     setTimeout(() => getTasksForProject($("#selectProjects").val(), 3), 100);
     snackbar("Task could not be deleted, please try again later!", true);
 }
 
 function deleteTask(taskId) {
-    console.log("deleteTask");
     var url = backendBaseUrl + httpRequestParamaters.backendUrlTasks + "/" + taskId;
     remove(url, taskDeleteSucces, taskDeleteError);
 }

@@ -218,7 +218,6 @@ function showDetailModal(project) {
 
     //set the placeholders right and open the modal
     openModal($("#addProjectModal"));
-    //TODO initDatePicker(false);
 }
 
 function initDatePicker(add) {

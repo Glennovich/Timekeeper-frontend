@@ -52,17 +52,15 @@ function timer() {
 }
 
 function disableMenu(){
+    disableElement($(".menu-bar"), true);
     //disable head menu
-    $(".nav-wrapper ul").addClass("isDisabled");
-    //disable sidenav for mobile
-    $(".sidenav").addClass("isDisabled");
+//    $(".menu-bar a").foreach;
 }
 
 function enableMenu(){
+    disableElement($(".menu-bar"), true);
     //enable head menu
-    var nav = $(".nav-wrapper ul").removeClass("isDisabled");
-    //enable sidenav for mobile
-    var sideNav = $(".sidenav").removeClass("isDisabled");
+//    var nav = $(".nav-wrapper ul").removeClass("isDisabled");
 }
 
 function formatTimer(hours, minutes, seconds){
