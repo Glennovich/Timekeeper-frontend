@@ -120,7 +120,6 @@ function saveProject() {
         $("#inputProjectName").val("");
     }
     if ($("#inputProjectName").val() !== "") {
-        var url = backendBaseUrl + httpRequestParamaters.backendUrlProject;
         if ($("#addOrUpdate").val() === "ADD") {
             addProject();
         } else {
@@ -137,6 +136,7 @@ function editProject() {
         "deadLine": $("#inputProjectDueDate").val(),
         "status": $("#projectStatus").val()
     }
+    var url = backendBaseUrl + httpRequestParamaters.backendUrlProject;
     put(url, formData, projectUpdateSuccess, projectEditError);
 }
 
@@ -146,6 +146,7 @@ function addProject() {
         "description": $("#textAreaProjectDescription").val(),
         "deadLine": $("#inputProjectDueDate").val()
     };
+    var url = backendBaseUrl + httpRequestParamaters.backendUrlProject;
     post(url, formData, projectSaveSuccess, projectAddError);
 }
 
