@@ -4,16 +4,16 @@ var isRunning = false;
 
 $(document).ready(function(){
     //event listeners
-    $("#startTimer").on("click", function(){
+    $("#btnStartTimer").on("click", function(){
         if(!isRunning){
         //disable menu
             disableMenu();
             isRunning = true;
-            t = setTimeout(timer, 1000);
+            t = setTimeout(updateTimer, 1000);
         }
     });
 
-    $("#stopTimer").on("click", function(){
+    $("#btnStopTimer").on("click", function(){
         if(isRunning){
             //enable menu
             enableMenu();
@@ -23,7 +23,7 @@ $(document).ready(function(){
     });
 
     //set the timer back to 00:00:00
-    $("#resetTimer").on("click", function(){
+    $("#btnResetTimer").on("click", function(){
             //enable menu
             enableMenu();
             isRunning = false;
@@ -35,7 +35,7 @@ $(document).ready(function(){
     });
 });
 
-function timer() {
+function updateTimer() {
     seconds++;
     if (seconds >= 60) {
         seconds = 0;
@@ -48,7 +48,7 @@ function timer() {
     
     $("#timer").text(formatTimer(hours, minutes, seconds));
 
-    t = setTimeout(timer, 1000);
+    t = setTimeout(updateTimer, 1000);
 }
 
 function disableMenu(){

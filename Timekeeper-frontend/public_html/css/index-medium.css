@@ -11,13 +11,13 @@
     font-size: 120px;
 }
 
-#startTimer{
+#btnStartTimer{
     grid-column: 1 / 2;
 }
-#stopTimer{
+#btnStopTimer{
     grid-column: 2 / 3;
 }
-#resetTimer{
+#btnResetTimer{
     grid-column: 3 / 4;
 }
 .title-container{

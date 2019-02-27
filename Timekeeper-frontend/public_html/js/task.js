@@ -22,13 +22,11 @@ function setProjectsInSelect(response) {
         $(selectelement).append(new Option(project.name, project.id));
     });
 
-    //if projects found, enable add button and else select first option default
     if ($(selectelement.selector + " option").length > 0) {
         $("#btnAddTask").removeAttr("disabled");
         $(selectelement).val($(selectelement.selector + " option:first").val());
     }
 
-    //change selected project if there is an item in local storage & if this project still exists in the list!
     if (timekeeperStorage.getItem("selectedProject")) {
         var selectedTaskProjectId = timekeeperStorage.getItem("selectedProject");
         if ($(selectelement.selector + " option[value='" + selectedTaskProjectId + "']").length != 0) {
@@ -36,18 +34,13 @@ function setProjectsInSelect(response) {
         }
     }
 
-    //this will trigger the getTasksForProject to execute, thus removing the need for a call to getTasksForProject here
     $(selectelement).trigger("change");
-
     updateTaskProject();
 }
 
 function getProjectsError() {
-    //getting projects failed: disable add button
     $("#btnAddTask").attr("disabled", "disabled");
     snackbar("Project could not be loaded, try again!", true);
-    //NOTE: in case projects have been loaded and the service dies then, 
-    //      clicking on the Save button will still catch the error
 }
 
 function getListOfStatusses() {
@@ -56,7 +49,7 @@ function getListOfStatusses() {
 }
 
 function storeStatusses(response) {
-    statusses = JSON.parse(response).taskStatuses;
+    statusses = JSON.parse(response).selectTaskStatuses;
 }
 
 function getListOfPriorities() {
@@ -69,7 +62,6 @@ function storePriorities(response) {
 }
 
 function initializeEventHandlers() {
-    //handling events, as is the tradition
     $("#btnSaveTask").on("click", function () {
         saveTask();
         closeModal($("#addTaskModal"));
@@ -82,9 +74,9 @@ function initializeEventHandlers() {
 
     $("#btnAddTask").on("click", function () {
         openModal($("#addTaskModal"));
-        $("#taskStatus option[value!='Ready to start']").attr("disabled", "disabled");
-        $("#taskName").val("").removeClass("invalid");
-        setTimeout(() => $("#taskName").focus(), 3);
+        $("#selectTaskStatus option[value!='Ready to start']").attr("disabled", "disabled");
+        $("#inputTaskName").val("").removeClass("invalid");
+        setTimeout(() => $("#inputTaskName").focus(), 3);
     });
 
     $("#formAddTask input,#formAddTask textarea").keydown(function (e) {
@@ -95,10 +87,7 @@ function initializeEventHandlers() {
     });
 
     $("#selectProjects").on("change", function () {
-        //this event may sometimes fire even if no project is selected, causing null to be passed to getTasksForProject
-        //only execute the following code if we have a selected project
         if ($("#selectProjects").val()) {
-            //save current projectId
             timekeeperStorage.setItem("selectedProject", $("#selectProjects").val());
             getTasksForProject($("#selectProjects").val(), 7);
             updateTaskProject();
@@ -108,32 +97,25 @@ function initializeEventHandlers() {
 
 function initializeModal() {
     setTimeout(() => {
-        addArrayToSelectAsOptions(statusses, $("#taskStatus"));
-        addArrayToSelectAsOptions(priorities, $("#taskPriority"));
+        addArrayToSelectAsOptions(statusses, $("#selectTaskStatus"));
+        addArrayToSelectAsOptions(priorities, $("#selectTaskPriority"));
     }, 1000);
 }
 
 function clearFormAddTask() {
-    //clear fields (don't clear taskProject input field, we need that if they want to add a next task)
-    $("#taskId").val("");
-    $("#taskName").val("");
-    $("#taskDescription").val("");
-    $("#taskStatus").val(defaultTaskStatus);
-    $("#taskPriority").val(defaultTaskPriority);
-
-    //clear any possible errors
+    $("#inputTaskId").val("");
+    $("#inputTaskName").val("");
+    $("#textAreaTaskDescription").val("");
+    $("#selectTaskStatus").val(defaultTaskStatus);
+    $("#selectTaskPriority").val(defaultTaskPriority);
     $("#taskAddFailedMessage").text("");
 }
 
 function updateTaskProject() {
-    //fill in project name in taskProject input field in modal form
-    $("#taskProject").val($("#selectProjects option:selected").text());
+    $("#inputTaskProject").val($("#selectProjects option:selected").text());
 }
 
 function getTasksForProject(projectId, flag) {
-
-    //Only execute request if projectId is not null. Sometimes, when the db has just been restarted the system
-    //will try to do getTasksForProject(null,cb) which causes a list of undefined tasks to appear
     if (projectId) {
         clearTable(() => {
             var url = backendBaseUrl + httpRequestParamaters.backendUrlTasksFromProject + "/" + projectId;
@@ -216,7 +198,7 @@ function addArrayToSelectAsOptions(array, selectelement) {
 }
 
 function getStatussesError() {
-    $("#btnAddTask").addClass("disabled"); 
+    $("#btnAddTask").addClass("disabled");
 }
 
 function getPrioritiesError() {
@@ -225,37 +207,42 @@ function getPrioritiesError() {
 }
 
 function saveTask() {
-    if ($.trim($("#taskName").val()) != "") {
-        if ($.trim($("#taskId").val()) != "") {
-            //edit existing task
-            var d = new Date();
-            var currentTime = d.getFullYear() + "-" + prependZeroes((d.getMonth() + 1), 2) + "-" + prependZeroes(d.getDate(), 2)
-                    + "T" + prependZeroes(d.getHours(), 2) + ":" + prependZeroes(d.getMinutes(), 2) + ":00";
-            var formData = {
-                "id": $("#taskId").val(),
-                "name": $("#taskName").val(),
-                "description": $("#taskDescription").val(),
-                "projectId": $("#selectProjects").val(),
-                "status": $("#taskStatus").val(),
-                "priority": $("#taskPriority").val(),
-                "currentTime": currentTime
-            };
-            var url = backendBaseUrl + httpRequestParamaters.backendUrlTasks
-            put(url, formData, taskEditSuccess, taskEditError);
-
+    if ($.trim($("#inputTaskName").val()) != "") {
+        if ($.trim($("#inputTaskId").val()) != "") {
+            editExistingTask();
         } else {
-            //add new
-            var formData = {
-                "name": $("#taskName").val(),
-                "description": $("#taskDescription").val(),
-                "projectId": $("#selectProjects").val(),
-                "status": $("#taskStatus").val(),
-                "priority": $("#taskPriority").val()
-            };
-            var url = backendBaseUrl + httpRequestParamaters.backendUrlTasks
-            post(url, formData, taskAddSuccess, taskAddError);
+            addNewTask();
         }
     }
+}
+
+function addNewTask() {
+    var formData = {
+        "name": $("#inputTaskName").val(),
+        "description": $("#textAreaTaskDescription").val(),
+        "projectId": $("#selectProjects").val(),
+        "status": $("#selectTaskStatus").val(),
+        "priority": $("#selectTaskPriority").val()
+    };
+    var url = backendBaseUrl + httpRequestParamaters.backendUrlTasks
+    post(url, formData, taskAddSuccess, taskAddError);
+}
+
+function editExistingTask() {
+    var d = new Date();
+    var currentTime = d.getFullYear() + "-" + prependZeroes((d.getMonth() + 1), 2) + "-" + prependZeroes(d.getDate(), 2)
+            + "T" + prependZeroes(d.getHours(), 2) + ":" + prependZeroes(d.getMinutes(), 2) + ":00";
+    var formData = {
+        "id": $("#inputTaskId").val(),
+        "name": $("#inputTaskName").val(),
+        "description": $("#textAreaTaskDescription").val(),
+        "projectId": $("#selectProjects").val(),
+        "status": $("#selectTaskStatus").val(),
+        "priority": $("#selectTaskPriority").val(),
+        "currentTime": currentTime
+    };
+    var url = backendBaseUrl + httpRequestParamaters.backendUrlTasks
+    put(url, formData, taskEditSuccess, taskEditError);
 }
 
 function prependZeroes(number, maxlength) {
@@ -272,12 +259,12 @@ function times(dink, numberOfTimes) {
 
 function taskAddSuccess() {
     clearFormAddTask();
-
-    //show a snackbar to let the user know that the task is created successfully
     snackbar("Task created!");
+    reloadTable();
+}
 
-    //reload table
-    setTimeout(() => getTasksForProject($("#selectProjects").val(), 1), 100);
+function reloadTable() {
+    setTimeout(() => getTasksForProject($("#selectProjects").val(), 8), 100);
 }
 
 function taskAddError(response) {
@@ -291,34 +278,29 @@ function taskAddError(response) {
 
 function taskEditSuccess() {
     clearFormAddTask();
-
-    //show a snackbar to let the user know that the task is created successfully
     snackbar("Task changed!");
-
-    //reload row for changed task
-    setTimeout(() => getTasksForProject($("#selectProjects").val(), 8), 100);
+    reloadTable();
 }
 
 function taskEditError(response) {
-    //if we have an error: show it, otherwise: default error
     if (response) {
         snackbar(response.responseText);
     } else {
         snackbar("Task could not be changed, please try again later!", true);
-   }
+    }
 }
 
 function showDetailModal(task) {
     openModal($("#addTaskModal"));
-    $("#taskId").val(task.id);
-    $("#taskName").val(task.name);
-    $("#taskDescription").val(task.description);
-    $("#taskStatus").val(task.status);
-    $("#taskPriority").val(task.priority);
+    $("#inputTaskId").val(task.id);
+    $("#inputTaskName").val(task.name);
+    $("#textAreaTaskDescription").val(task.description);
+    $("#selectTaskStatus").val(task.status);
+    $("#selectTaskPriority").val(task.priority);
 
     //edit-mode: all statuses can be selected
-    $("#taskStatus option").removeAttr("disabled");
-    $("#taskName").removeClass("invalid").focus();
+    $("#selectTaskStatus option").removeAttr("disabled");
+    $("#inputTaskName").removeClass("invalid").focus();
 }
 
 function confirmDeleteTask(task) {
@@ -339,4 +321,4 @@ function deleteTask(taskId) {
     var url = backendBaseUrl + httpRequestParamaters.backendUrlTasks + "/" + taskId;
     remove(url, taskDeleteSucces, taskDeleteError);
 }
-    
+

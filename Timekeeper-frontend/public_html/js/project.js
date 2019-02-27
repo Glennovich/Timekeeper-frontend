@@ -17,15 +17,9 @@ function initializeEventHandlers() {
     $("#btnAddProject").on("click", function () {
         $("#addOrUpdate").val("ADD");
         openAddModal();
-        // initDatePicker(true);
-
-        //clear the form fields
         clearForm();
-
         setTimeout(() => {
-            $("#projectName").focus();
-            $("#projectDueDateLabel").removeClass("active");
-            $("#projectDescriptionLabel").removeClass("active");
+            $("#inputProjectName").focus();
         }, 3);
     });
 
@@ -36,21 +30,20 @@ function initializeEventHandlers() {
         }
     });
 
-    $("#projectDueDate").on("focus", function () {
-        $("#projectDueDate").click();
+    $("#inputProjectDueDate").on("focus", function () {
+        $("#inputProjectDueDate").click();
     });
 
-    $("#projectDueDate").datepicker({firstDay: 1});
-    $("#projectDueDate").datepicker("option", "dateFormat", "yy-mm-dd");
+    $("#inputProjectDueDate").datepicker({firstDay: 1});
+    $("#inputProjectDueDate").datepicker("option", "dateFormat", "yy-mm-dd");
 
 
 }
 
 function clearForm() {
-    //focus on input field name and remove invalid class if neede
-    $("#projectName").val("").removeClass("invalid");
-    $("#projectDescription").val("");
-    $("#projectDueDate").val("").removeClass("invalid");
+    $("#inputProjectName").val("").removeClass("invalid");
+    $("#textAreaProjectDescription").val("");
+    $("#inputProjectDueDate").val("").removeClass("invalid");
 }
 
 function getProjects() {
@@ -79,8 +72,8 @@ function displayProjects(response) {
                 .append("<span class='small-screen-hidden'>" + project.deadLine + "</span>")
                 .append("<span class='small-screen-hidden'>" + project.numberOfTasks + "</span>")
                 .append("<span id='pencil_" + project.id + "' class='clickable'><img src='./assets/img/icon/edit.svg'/></span>")
-                .append("<span id='goto_" +   project.id + "' class='clickable'><img title='" + project.numberOfTasks + " task(s)' src='./assets/img/icon/" + determineIcon(project.numberOfTasks) + ".svg'/></span>")
-                .append("<span id='trash_" +  project.id + "' class='clickable'><img src='./assets/img/icon/delete.svg'/></span>")
+                .append("<span id='goto_" + project.id + "' class='clickable'><img title='" + project.numberOfTasks + " task(s)' src='./assets/img/icon/" + determineIcon(project.numberOfTasks) + ".svg'/></span>")
+                .append("<span id='trash_" + project.id + "' class='clickable'><img src='./assets/img/icon/delete.svg'/></span>")
                 .append("<div class='separationLine'></div>");
 
         $("#pencil_" + project.id).on("click", function () {
@@ -106,12 +99,12 @@ function initializeFieldsForDisplay(project) {
     }
 }
 
-function determineIcon(numberOfTasks){
+function determineIcon(numberOfTasks) {
     var icon = "empty-folder";
-    if(numberOfTasks != "0"){
+    if (numberOfTasks != "0") {
         icon = "search-in-folder";
     }
-    
+
     return icon;
 }
 
@@ -123,29 +116,37 @@ function refreshProjects() {
 }
 
 function saveProject() {
-    if ($("#projectName").val().replace(/ /g, '') === "") {
-        $("#projectName").val("");
+    if ($("#inputProjectName").val().replace(/ /g, '') === "") {
+        $("#inputProjectName").val("");
     }
-    if ($("#projectName").val() !== "") {
+    if ($("#inputProjectName").val() !== "") {
         var url = backendBaseUrl + httpRequestParamaters.backendUrlProject;
         if ($("#addOrUpdate").val() === "ADD") {
-            var formData = {
-                "name": $("#projectName").val(),
-                "description": $("#projectDescription").val(),
-                "deadLine": $("#projectDueDate").val()
-            };
-            post(url, formData, projectSaveSuccess, projectAddError);
+            addProject();
         } else {
-            var formData = {
-                "id": $("#projectId").val(),
-                "name": $("#projectName").val(),
-                "description": $("#projectDescription").val(),
-                "deadLine": $("#projectDueDate").val(),
-                "status": $("#projectStatus").val()
-            }
-            put(url, formData, projectUpdateSuccess, projectEditError);
+            editProject();
         }
     }
+}
+
+function editProject() {
+    var formData = {
+        "id": $("#projectId").val(),
+        "name": $("#inputProjectName").val(),
+        "description": $("#textAreaProjectDescription").val(),
+        "deadLine": $("#inputProjectDueDate").val(),
+        "status": $("#projectStatus").val()
+    }
+    put(url, formData, projectUpdateSuccess, projectEditError);
+}
+
+function addProject() {
+    var formData = {
+        "name": $("#inputProjectName").val(),
+        "description": $("#textAreaProjectDescription").val(),
+        "deadLine": $("#inputProjectDueDate").val()
+    };
+    post(url, formData, projectSaveSuccess, projectAddError);
 }
 
 function projectSaveSuccess() {
@@ -195,7 +196,7 @@ function projectDeleteSucces() {
     refreshProjects();
 }
 
-function projectDeleteError() { 
+function projectDeleteError() {
     closeDeleteModal();
     snackbar("Project could not be deleted, please try again later!", true);
 }
@@ -216,11 +217,9 @@ function closeDeleteModal() {
 }
 
 function showDetailModal(project) {
-    //fill in fields of modal but first clear to delete error messages
     clearForm();
     fillInModalFields(project);
 
-    //set the placeholders right and open the modal
     openModal($("#addProjectModal"));
 }
 
@@ -245,14 +244,13 @@ function initDatePicker(add) {
 function fillInModalFields(project) {
     $("#addOrUpdate").val("UPDATE");
     $("#projectId").val(project.id);
-    $("#projectName").val(project.name);
-    $("#projectDescription").val(project.description);
-    $("#projectDueDate").val(project.deadLine);
+    $("#inputProjectName").val(project.name);
+    $("#textAreaProjectDescription").val(project.description);
+    $("#inputProjectDueDate").val(project.deadLine);
     $("#projectStatus").val(project.status);
 }
 
-function goToProjectDetail(projectId){
-    //set the id of the project in local storage
+function goToProjectDetail(projectId) {
     localStorage.setItem("selectedProject", projectId);
     window.location.href = "./tasks.html";
 }
