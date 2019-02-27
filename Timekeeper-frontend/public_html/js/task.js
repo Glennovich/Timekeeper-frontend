@@ -49,7 +49,7 @@ function getListOfStatusses() {
 }
 
 function storeStatusses(response) {
-    statusses = JSON.parse(response).selectTaskStatuses;
+    statusses = JSON.parse(response).taskStatuses;
 }
 
 function getListOfPriorities() {
