@@ -1,5 +1,5 @@
 .separationLine{
-    grid-column: 1 / 7;
+    grid-column: 1 / 8;
 }
 body{
     width: 100%;
@@ -14,7 +14,7 @@ body{
 }
 .table-body, .table-head{
     width: 100%;
-    grid-template-columns: auto 150px 150px 40px 40px 40px;
+    grid-template-columns: auto 150px 150px 40px 40px 40px 40px;
 }
 .medium-screen-hidden{
     display: none;

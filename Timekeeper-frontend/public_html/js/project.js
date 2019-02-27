@@ -79,11 +79,15 @@ function displayProjects(response) {
                 .append("<span class='small-screen-hidden'>" + project.deadLine + "</span>")
                 .append("<span class='small-screen-hidden'>" + project.numberOfTasks + "</span>")
                 .append("<span id='pencil_" + project.id + "' class='clickable'><img src='./assets/img/icon/edit.svg'/></span>")
-                .append("<span id='trash_" + project.id + "' class='clickable'><img src='./assets/img/icon/delete.svg'/></span>")
+                .append("<span id='goto_" +   project.id + "' class='clickable'><img title='" + project.numberOfTasks + " task(s)' src='./assets/img/icon/" + determineIcon(project.numberOfTasks) + ".svg'/></span>")
+                .append("<span id='trash_" +  project.id + "' class='clickable'><img src='./assets/img/icon/delete.svg'/></span>")
                 .append("<div class='separationLine'></div>");
 
         $("#pencil_" + project.id).on("click", function () {
             showDetailModal(project);
+        });
+        $("#goto_" + project.id).on("click", function () {
+            goToProjectDetail(project.id);
         });
         $("#trash_" + project.id).on("click", function () {
             confirmDelete(project);
@@ -249,6 +253,6 @@ function fillInModalFields(project) {
 
 function goToProjectDetail(projectId){
     //set the id of the project in local storage
-    localStorage.setItem("taskProjectId", projectId);
+    localStorage.setItem("selectedProject", projectId);
     window.location.href = "./tasks.html";
 }
