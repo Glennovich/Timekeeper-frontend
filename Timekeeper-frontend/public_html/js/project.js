@@ -5,7 +5,6 @@ $(document).ready(function () {
 });
 
 function initializeContent(){
-    console.log("initializeContent");
     getProjects();
 }
 
