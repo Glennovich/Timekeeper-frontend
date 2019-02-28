@@ -1,8 +1,13 @@
 $(document).ready(function () {
-    getProjects();
+    initializeContent();
 
     initializeEventHandlers();
 });
+
+function initializeContent(){
+    console.log("initializeContent");
+    getProjects();
+}
 
 function initializeEventHandlers() {
     $("#btnSaveProject").on("click", function () {

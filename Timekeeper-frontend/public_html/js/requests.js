@@ -11,29 +11,31 @@
  * @param {function} functionOnError : Optional, but if passed, the functionOnSuccess becomes mandatory. 
  * The same rules apply as for the functionOnSuccess.
  */
+var connectionAlive = true;
 
-function get(url, functionOnSucces, functionOnError) {
-    createRequestWithoutPayload('GET', url, functionOnSucces, functionOnError, 1);
+function get(url, functionOnSucces, functionOnError, inBackground) {
+    createRequestWithoutPayload('GET', url, functionOnSucces, functionOnError, inBackground);
 }
 
 function remove(url, functionOnSucces, functionOnError) {
-    createRequestWithoutPayload('DELETE', url, functionOnSucces, functionOnError, 2);
+    createRequestWithoutPayload('DELETE', url, functionOnSucces, functionOnError);
 }
 
 function put(url, payload, functionOnSucces, functionOnError) {
-    createRequestWithPayload('PUT', url, payload, functionOnSucces, functionOnError, 3);
+    createRequestWithPayload('PUT', url, payload, functionOnSucces, functionOnError);
 }
 
 function post(url, payload, functionOnSucces, functionOnError) {
-    createRequestWithPayload('POST', url, payload, functionOnSucces, functionOnError, 4);
+    createRequestWithPayload('POST', url, payload, functionOnSucces, functionOnError);
 }
 
 function patch(url, payload, functionOnSucces, functionOnError) {
-    createRequestWithPayload('PATCH', url, payload, functionOnSucces, functionOnError, 5);
+    createRequestWithPayload('PATCH', url, payload, functionOnSucces, functionOnError);
 }
 
-function createRequestWithoutPayload(typeOfRequest, url, functionOnSucces, functionOnError, test) {
-    turnBusyIndicatorOn();
+function createRequestWithoutPayload(typeOfRequest, url, functionOnSucces, functionOnError, inBackground) {
+    if (!inBackground)
+        turnBusyIndicatorOn();
     var xhr = createCORSRequest(typeOfRequest, url);
     if (!xhr) {
         console.log('CORS not supported');
@@ -52,7 +54,7 @@ function createRequestWithPayload(typeOfRequest, url, payload, functionOnSucces,
         return;
     }
     setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError);
-    xhr.setRequestHeader("Token", "sdfsf");
+    xhr.setRequestHeader("token", "nhcuyfyouvxjxtmmvnlnvruohdqiwgzlmozrhoyhuyankakswhszgsaihqkyyfizvyvbsrjtqrnonmpzcmdsumesarpspdkecymrhszbtcaddtwwbbgsiqawpptuinzu");
     xhr.send(JSON.stringify(payload));
 }
 
@@ -81,10 +83,18 @@ function setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError) {
 
     xhr.onerror = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status == 401) {
+                window.location.href = '401.html';
+                return;
+            }
             try {
                 turnBusyIndicatorOff();
-                if(xhr.status == 0) connectionLostProcedure()
-                else functionOnError(xhr.response);
+                if (xhr.status == 0) {
+                    connectionLostProcedure();
+                } else {
+                    if (functionOnError)
+                        functionOnError(xhr.response);
+                }
             } catch (e) {
             }
         }
@@ -92,19 +102,27 @@ function setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError) {
     }
 }
 
-function connectionLostProcedure(){
-    $.each(".title-container *", (i, el) => disableElement(el, true));
-            
-    snackbar("A connection error occured, please try again later!", true);
-    //var interval = setInterval(checkServiceLive(interval => clearInterval(interval)), 1000);
-
+function connectionLostProcedure() {
+    if (connectionAlive) {
+        $.each($(".title-container *"), (i, el) => {
+            disableElement(el, true);
+        });
+        snackbar("A connection error occured, please try again later!", true);
+    }
+    connectionAlive = false;
+    setTimeout(reconnect, 10000);
 }
 
-function reconnectionProcedure(){
-    $(".title-container *").addClass("disabled");
-    snackbar("A connection error occured, please try again later!", true);
-}
+function reconnect() {
+    get((backendBaseUrl + "live"),
+            function () {
+                connectionAlive = true;
+                $.each($(".title-container *"), (i, el) => {
+                    disableElement(el, false);
+                });
 
-function checkServiceLive(stopFunction){
-    get(backendBaseUrl + "live", stopFunction);
+                snackbar("Connection restored");
+                initializeContent();
+            }, null, true);
+
 }

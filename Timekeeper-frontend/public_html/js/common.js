@@ -18,14 +18,16 @@ function turnBusyIndicatorOn() {
 }
 
 function turnBusyIndicatorOff() {
-    var requestNumber = latestRequest;
-    $(".loader").addClass("close").removeClass("open");
-    setTimeout(function () {
-        if (requestNumber == latestRequest) {
-            $(".loader").hide();
-            loaderActive = false;
-        }
-    }, 500);
+    if (loaderActive) {
+        var requestNumber = latestRequest;
+        $(".loader").addClass("close").removeClass("open");
+        setTimeout(function () {
+            if (requestNumber == latestRequest) {
+                $(".loader").hide();
+                loaderActive = false;
+            }
+        }, 500);
+    }
 }
 
 function openModal(modal) {
@@ -50,6 +52,8 @@ function snackbar(text, error) {
     $(snackbar).addClass("show");
     if (error)
         $(snackbar).addClass("error");
+    else
+        $(snackbar).removeClass("error");
     setTimeout(() => $(snackbar).removeClass("show"), 3000);
 }
 
@@ -137,10 +141,10 @@ function unbindSecondDeleteModalButtons() {
 function disableElement(node, disable) {
     if (disable)
         $(node)
-            .attr("disabled", "disabled")
-            .addClass("disabled");
+                .attr("disabled", "disabled")
+                .addClass("disabled");
     else
         $(node)
-            .removeClass("disabled")
-            .removeAttr("disabled");
+                .removeClass("disabled")
+                .removeAttr("disabled");
 }

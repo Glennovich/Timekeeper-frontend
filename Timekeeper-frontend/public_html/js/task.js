@@ -4,12 +4,16 @@ var statusses;
 var priorities;
 
 $(document).ready(function () {
+    initializeContent();
+    initializeEventHandlers();
+});
+
+function initializeContent(){
     initializeProjectsInSelect();
     getListOfStatusses();
     getListOfPriorities();
     initializeModal();
-    initializeEventHandlers();
-});
+}
 
 function initializeProjectsInSelect() {
     var url = backendBaseUrl + httpRequestParamaters.backendUrlProjects;
