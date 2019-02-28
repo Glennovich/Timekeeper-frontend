@@ -109,7 +109,7 @@ function initializeModal() {
 function clearFormAddTask() {
     $("#inputTaskId").val("");
     $("#inputTaskName").val("");
-    $("#textAreaTaskDescription").val("");
+    $("#textareaTaskDescription").val("");
     $("#selectTaskStatus").val(defaultTaskStatus);
     $("#selectTaskPriority").val(defaultTaskPriority);
     $("#taskAddFailedMessage").text("");
@@ -223,7 +223,7 @@ function saveTask() {
 function addNewTask() {
     var formData = {
         "name": $("#inputTaskName").val(),
-        "description": $("#textAreaTaskDescription").val(),
+        "description": $("#textareaTaskDescription").val(),
         "projectId": $("#selectProjects").val(),
         "status": $("#selectTaskStatus").val(),
         "priority": $("#selectTaskPriority").val()
@@ -239,7 +239,7 @@ function editExistingTask() {
     var formData = {
         "id": $("#inputTaskId").val(),
         "name": $("#inputTaskName").val(),
-        "description": $("#textAreaTaskDescription").val(),
+        "description": $("#textareaTaskDescription").val(),
         "projectId": $("#selectProjects").val(),
         "status": $("#selectTaskStatus").val(),
         "priority": $("#selectTaskPriority").val(),
@@ -298,7 +298,7 @@ function showDetailModal(task) {
     openModal($("#addTaskModal"));
     $("#inputTaskId").val(task.id);
     $("#inputTaskName").val(task.name);
-    $("#textAreaTaskDescription").val(task.description);
+    $("#textareaTaskDescription").val(task.description);
     $("#selectTaskStatus").val(task.status);
     $("#selectTaskPriority").val(task.priority);
 

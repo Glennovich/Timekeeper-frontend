@@ -46,7 +46,7 @@ function initializeEventHandlers() {
 
 function clearForm() {
     $("#inputProjectName").val("").removeClass("invalid");
-    $("#textAreaProjectDescription").val("");
+    $("#textareaProjectDescription").val("");
     $("#inputProjectDueDate").val("").removeClass("invalid");
 }
 
@@ -136,7 +136,7 @@ function editProject() {
     var formData = {
         "id": $("#projectId").val(),
         "name": $("#inputProjectName").val(),
-        "description": $("#textAreaProjectDescription").val(),
+        "description": $("#textareaProjectDescription").val(),
         "deadLine": $("#inputProjectDueDate").val(),
         "status": $("#projectStatus").val()
     }
@@ -147,7 +147,7 @@ function editProject() {
 function addProject() {
     var formData = {
         "name": $("#inputProjectName").val(),
-        "description": $("#textAreaProjectDescription").val(),
+        "description": $("#textareaProjectDescription").val(),
         "deadLine": $("#inputProjectDueDate").val()
     };
     var url = backendBaseUrl + httpRequestParamaters.backendUrlProject;
@@ -250,7 +250,7 @@ function fillInModalFields(project) {
     $("#addOrUpdate").val("UPDATE");
     $("#projectId").val(project.id);
     $("#inputProjectName").val(project.name);
-    $("#textAreaProjectDescription").val(project.description);
+    $("#textareaProjectDescription").val(project.description);
     $("#inputProjectDueDate").val(project.deadLine);
     $("#projectStatus").val(project.status);
 }
