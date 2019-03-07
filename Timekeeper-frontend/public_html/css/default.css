@@ -55,12 +55,23 @@ select{
 }
 
 .default-button.disabled,
-.menu-bar li.disabled,
-.default-button.disabled:hover,
-.menu-bar li.disabled:hover{
+.default-button.disabled:hover{
     background-color: #eee;
     transition: background-color 0.2s ease;
     cursor: auto;
+}
+
+.menu-bar li.disabled,
+.menu-bar li a.disabled,
+.menu-bar li.disabled:hover,
+.menu-bar li a.disabled:hover{
+    background-color: #26a69a;
+    color: #bbb;
+    cursor: auto;
+}
+
+.menu-bar li a.disabled{
+    pointer-events:none;
 }
 
 /*------ MODALS -----------*/
