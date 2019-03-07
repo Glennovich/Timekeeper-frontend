@@ -31,8 +31,10 @@ function initializeEventHandlers() {
 
     $("input").keyup(function (e) {
         if (e.keyCode === 13) {
-            saveProject();
-            closeAddModal();
+            if (!($("#inputProjectDueDate").datepicker("widget").is(":visible"))) {
+                saveProject();
+                closeAddModal();
+            }
         }
     });
 
