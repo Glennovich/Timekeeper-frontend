@@ -42,7 +42,15 @@ function closeModal(modal) {
     setTimeout(function () {
         $(modal).hide();
     }, 500);
+    clearFieldHighLights();
+}
 
+function clearFieldHighLights() {
+    $.each($(".required"), function (index, field) {
+        $(field).removeClass("errorHighLight");
+    });
+    $(".error-banner").removeClass("open");
+    $(".error-banner").addClass("close");
 }
 
 function snackbar(text, error) {
@@ -147,4 +155,17 @@ function disableElement(node, disable) {
         $(node)
                 .removeClass("disabled")
                 .removeAttr("disabled");
+}
+
+function checkRequiredInputFields() {
+    var allFieldsAreFilledIn = true;
+    $.each($(".required"), function (index, field) {
+        if ($.trim($(field).val()) == "") {
+            $(field).addClass("errorHighLight");
+            $(".error-banner").removeClass("close");
+            $(".error-banner").addClass("open");
+            allFieldsAreFilledIn = false;
+        }
+    });
+    return allFieldsAreFilledIn;
 }

@@ -4,14 +4,16 @@ $(document).ready(function () {
     initializeEventHandlers();
 });
 
-function initializeContent(){
+function initializeContent() {
     getProjects();
 }
 
 function initializeEventHandlers() {
     $("#btnSaveProject").on("click", function () {
-        saveProject();
-        closeAddModal();
+        if (checkRequiredInputFields()) {
+            saveProject();
+            closeAddModal();
+        }
     });
 
     $("#btnCancelProject").on("click", function () {
@@ -167,6 +169,7 @@ function openAddModal() {
 }
 
 function closeAddModal() {
+    clearFieldHighLights()
     closeModal($("#addProjectModal"));
 }
 

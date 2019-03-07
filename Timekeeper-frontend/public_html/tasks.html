@@ -57,11 +57,13 @@
                     <form id="formAddTask">
                         <input type="hidden" id="inputTaskId" name="inputTaskId" value=""/>
 
+                        <span class="error-banner">A required field was not filled.</span>
+
                         <span>Project</span>
                         <input type="text" id="inputTaskProject" disabled>
 
                         <span>Task</span>
-                        <input type="text" id="inputTaskName" name="inputTaskName" required>
+                        <input type="text" id="inputTaskName" name="inputTaskName" class="required">
 
                         <span>Description</span>
                         <textarea id="textareaTaskDescription" name="textareaTaskDescription"></textarea>

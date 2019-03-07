@@ -8,7 +8,7 @@ $(document).ready(function () {
     initializeEventHandlers();
 });
 
-function initializeContent(){
+function initializeContent() {
     initializeProjectsInSelect();
     getListOfStatusses();
     getListOfPriorities();
@@ -67,13 +67,15 @@ function storePriorities(response) {
 
 function initializeEventHandlers() {
     $("#btnSaveTask").on("click", function () {
-        saveTask();
-        closeModal($("#addTaskModal"));
+        if (checkRequiredInputFields()) {
+            saveTask();
+            closeAddTaskModal();
+        }
     });
 
     $("#btnCancelTask").on("click", function () {
         clearFormAddTask();
-        closeModal($("#addTaskModal"));
+        closeAddTaskModal();
     });
 
     $("#btnAddTask").on("click", function () {
@@ -97,6 +99,11 @@ function initializeEventHandlers() {
             updateTaskProject();
         }
     });
+}
+
+function closeAddTaskModal() {
+    clearFieldHighLights();
+    closeModal($("#addTaskModal"));
 }
 
 function initializeModal() {

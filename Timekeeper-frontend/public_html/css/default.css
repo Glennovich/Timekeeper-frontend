@@ -99,23 +99,6 @@ select{
     background-color: rgba(0,0,0,0.4);
 }
 
-.close{
-    opacity: 0.0;
-    -webkit-transition: opacity var(--fadeDuration) ease-in-out;
-    -moz-transition: opacity var(--fadeDuration) ease-in-out;
-    -ms-transition: opacity var(--fadeDuration) ease-in-out;
-    -o-transition: opacity var(--fadeDuration) ease-in-out;
-    transition: opacity var(--fadeDuration) ease-in-out;    
-}
-
-.open{
-    opacity: 1.0;
-    -webkit-transition: opacity var(--fadeDuration) ease-in-out;
-    -moz-transition: opacity var(--fadeDuration) ease-in-out;
-    -ms-transition: opacity var(--fadeDuration) ease-in-out;
-    -o-transition: opacity var(--fadeDuration) ease-in-out;
-    transition: opacity var(--fadeDuration) ease-in-out;    
-}
 
 .modal-window form input,
 .modal-window form textarea{
@@ -262,6 +245,17 @@ select{
     border-bottom: 1px solid #ddd;
 }
 
+.error-banner{
+    opacity: 0.0;
+    width: 100%;
+    text-align: center;
+    background-color: #f7ded4;
+    color: black;
+    background-image: url(../assets/img/icon/error.svg);
+    background-position: 9px 9px;
+    background-repeat: no-repeat;
+}
+
 .clickable{
     cursor: pointer;
 }
@@ -271,7 +265,6 @@ select{
 }
 
 .title-container h1,
-
 .title-container h4{
     grid-column: 1 / 2;
     font-weight: normal;
@@ -312,4 +305,26 @@ select{
 
 .error-span{
     color: red;
+}
+
+.modal-window form .errorHighLight {
+    border: 1px solid red;
+}
+
+.close{
+    opacity: 0.0;
+    -webkit-transition: opacity var(--fadeDuration) ease-in-out;
+    -moz-transition: opacity var(--fadeDuration) ease-in-out;
+    -ms-transition: opacity var(--fadeDuration) ease-in-out;
+    -o-transition: opacity var(--fadeDuration) ease-in-out;
+    transition: opacity var(--fadeDuration) ease-in-out;    
+}
+
+.open{
+    opacity: 1.0;
+    -webkit-transition: opacity var(--fadeDuration) ease-in-out;
+    -moz-transition: opacity var(--fadeDuration) ease-in-out;
+    -ms-transition: opacity var(--fadeDuration) ease-in-out;
+    -o-transition: opacity var(--fadeDuration) ease-in-out;
+    transition: opacity var(--fadeDuration) ease-in-out;    
 }
