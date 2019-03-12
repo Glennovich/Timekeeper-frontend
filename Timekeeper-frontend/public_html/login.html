@@ -1,0 +1,41 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Timekeeper. A simple time tracking tool that helps you track time on your projects. Once you start using it, you'll realize that this tool is a keeper, a timekeeper.">
+
+        <title>Timekeeper</title>
+
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+        <link rel="stylesheet" href="css/default.css">
+        <link rel="stylesheet" media="screen and (min-width: 0px)" href="css/login.css" />
+
+        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
+        <script src="js/common.js"></script>
+        <script src="js/config.js"></script>
+        <script src="js/user.js"></script>
+        <script src="js/requests.js"></script>
+    </head>
+
+    <body>
+        <div class="container">
+        <h1>Timekeeper</h1>
+        <form id="loginForm">
+            <div>
+                <span>Username</span>
+                <input type="text" id="txtLoginUserName"/>
+            </div>
+            <div>
+                <span>Password</span>
+                <input type="password" id="txtLoginPassword"/>
+            </div>
+            <a href="register.html">No account yet? Register here</a><br>
+            <input class="default-button" type="button" id="btnLogin" value="Login"/>
+        </form>
+        <div id="snackbar"></div>
+        </div>
+    </body>
+</html>

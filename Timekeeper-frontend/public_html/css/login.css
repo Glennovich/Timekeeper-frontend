@@ -1,0 +1,50 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 5-mrt-2019, 19:30:18
+    Author     : steven
+*/
+
+.container > form > div > span {
+    padding-top: 7px;
+    justify-self: right;
+    font-weight: bold;
+    width: 5%;
+}
+
+.container > form > a {
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.container > form > div > input {
+    border: none;
+    background: transparent;
+    border-bottom: 1px solid #ddd;
+    padding-left: 5px;
+    font-size: 16px;
+    display: block;
+}
+
+.container > form > .default-button {
+    padding: 9px 18px;
+    background-color: #26a69a;
+    transition: background-color 0.5s ease;
+    color: white;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 15px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    margin-top: 5px;
+}
+
+.container {
+    margin: auto;
+    width: 50%;
+}
+

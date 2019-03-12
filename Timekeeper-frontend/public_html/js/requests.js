@@ -42,7 +42,7 @@ function createRequestWithoutPayload(typeOfRequest, url, functionOnSucces, funct
         return;
     }
     setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError);
-    xhr.setRequestHeader("token", "nhcuyfyouvxjxtmmvnlnvruohdqiwgzlmozrhoyhuyankakswhszgsaihqkyyfizvyvbsrjtqrnonmpzcmdsumesarpspdkecymrhszbtcaddtwwbbgsiqawpptuinzu");
+    xhr.setRequestHeader("token", localStorage.getItem("token"));
     xhr.send();
 }
 
@@ -54,7 +54,7 @@ function createRequestWithPayload(typeOfRequest, url, payload, functionOnSucces,
         return;
     }
     setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError);
-    xhr.setRequestHeader("token", "nhcuyfyouvxjxtmmvnlnvruohdqiwgzlmozrhoyhuyankakswhszgsaihqkyyfizvyvbsrjtqrnonmpzcmdsumesarpspdkecymrhszbtcaddtwwbbgsiqawpptuinzu");
+    xhr.setRequestHeader("token", localStorage.getItem("token"));
     xhr.send(JSON.stringify(payload));
 }
 
@@ -72,6 +72,11 @@ function setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError) {
             if (xhr.status == 401) {
                 window.location.href = '401.html';
                 return;
+            }
+            if(xhr.status == 404){
+                turnBusyIndicatorOff();
+                if(functionOnError)
+                    functionOnError(xhr.response);
             }
             try {
                 turnBusyIndicatorOff();

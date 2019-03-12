@@ -7,6 +7,7 @@ var httpRequestParamaters = {
     "backendUrlTasksFromProject": "tasks",
     "backendUrlStatuses": "task/_statuses",
     "backendUrlPriorities": "task/_priorities",
+    "backendUrlUser": "user",
     "credentials": "SexyBatmanSquad:SuckMyDick"
 }
 
