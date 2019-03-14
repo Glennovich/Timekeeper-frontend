@@ -276,12 +276,14 @@ select{
 }
 
 .title-container h1,
-.title-container h4{
+.title-container h4,
+.title-container span{
     grid-column: 1 / 2;
     font-weight: normal;
 }
 
-.title-container select{
+.title-container select,
+.title-container a{
     grid-column: 2 / 4;
     align-self: center;
 }

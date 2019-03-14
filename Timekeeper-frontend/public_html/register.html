@@ -10,7 +10,7 @@
 
         <link rel="icon" href="favicon.ico" type="image/x-icon">
         <link rel="stylesheet" href="css/default.css">
-        <link rel="stylesheet" media="screen and (min-width: 0px)" href="css/login.css" />
+        <link rel="stylesheet" media="screen and (min-width: 0px)" href="css/register.css" />
 
         <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
@@ -21,31 +21,22 @@
     </head>
 
     <body>
-        <div class="container">
-        <h1>Timekeeper</h1>
-        <form id="registerForm">
+        <div class="menu-bar"></div>
+        <form id="registerForm" class="title-container static">
+            <h1>Timekeeper</h1>
             <span id="spanErrorMessage" hidden>Something went wrong! Please try again</span>
-            <div>
-                <span>Username</span>
-                <input type="text" id="txtRegisterUserName"/>
-            </div>
-            <div>
-                <span>Email</span>
-                <input type="text" id="txtRegisterEmail"/>
-            </div>
-            <div>
-                <span>Password</span>
-                <input type="password" id="txtRegisterPassword"/>
-            </div>
-            <div>
-                <span>Confirm password</span>
-                <input type="password" id="txtRegisterPasswordConfirm"/>
-            </div>
+            <span>Username</span>
+            <input type="text" id="txtRegisterUserName"/>
+            <span>Email</span>
+            <input type="text" id="txtRegisterEmail"/>
+            <span>Password</span>
+            <input type="password" id="txtRegisterPassword"/>
+            <span>Confirm password</span>
+            <input type="password" id="txtRegisterPasswordConfirm"/>
             <input class="default-button" type="button" id="btnRegister" value="Register"/>
         </form>
-        </div>
-        <div id="snackbar"></div>
-         <div class="loader close" hidden>
+
+        <div class="loader close" hidden>
             <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                  x="0px" y="0px" width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;"
                  xml:space="preserve">
