@@ -69,14 +69,28 @@ function createCORSRequest(method, url) {
 function setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError) {
     xhr.onload = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
+            console.log(xhr.status);
             if (xhr.status == 401) {
                 window.location.href = '401.html';
+                return;
+            }
+            if(xhr.status == 403){
+                turnBusyIndicatorOff();
+                if(functionOnError)
+                    functionOnError(xhr.response);
                 return;
             }
             if(xhr.status == 404){
                 turnBusyIndicatorOff();
                 if(functionOnError)
                     functionOnError(xhr.response);
+                return;
+            }
+            if(xhr.status == 409){
+                turnBusyIndicatorOff();
+                if(functionOnError)
+                    functionOnError(xhr.response);
+                return;
             }
             try {
                 turnBusyIndicatorOff();
@@ -90,6 +104,24 @@ function setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError) {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status == 401) {
                 window.location.href = '401.html';
+                return;
+            }
+            if(xhr.status == 403){
+                turnBusyIndicatorOff();
+                if(functionOnError)
+                    functionOnError(xhr.response);
+                return;
+            }
+            if(xhr.status == 404){
+                turnBusyIndicatorOff();
+                if(functionOnError)
+                    functionOnError(xhr.response);
+                return;
+            }
+            if(xhr.status == 409){
+                turnBusyIndicatorOff();
+                if(functionOnError)
+                    functionOnError(xhr.response);
                 return;
             }
             try {

@@ -25,6 +25,7 @@ function login(){
 }
 
 function register(){
+    console.log("test");
     if($("#txtRegisterUserName").val() !== "" && $("#txtRegisterPassword").val() !== "" && $("#txtRegisterPasswordConfirm").val() !== "" && $("#txtRegisterEmail").val() !== ""){
         if($("#txtRegisterPassword").val() === $("#txtRegisterPasswordConfirm").val()){
             var url = backendBaseUrl + httpRequestParamaters.backendUrlUser + "/register";
@@ -33,7 +34,6 @@ function register(){
                 "password": $("#txtRegisterPassword").val(),
                 "email": $("#txtRegisterEmail").val()
             };
-            
             post(url, formData, registerSucces, registerError);
         }
     }
@@ -44,7 +44,7 @@ function registerSucces(){
     window.location.href = 'login.html';
 }
 
-function registerError(){
+function registerError(response){
     snackbar("Registration failed, please try again!")
 }
 
@@ -53,7 +53,7 @@ function loginSuccess(response){
     window.location.href = 'index.html';
 }
 
-function loginError(){
+function loginError(response){
     snackbar("Login failed, please try again!", true);
 }
 
