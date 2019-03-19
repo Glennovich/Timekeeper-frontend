@@ -72,7 +72,7 @@ function displayProjects(response) {
     disableAddButton(false);
     $.each(JSON.parse(response), function (id, project) {
         initializeFieldsForDisplay(project);
-        console.log(project);
+
         $(".table-body")
                 .append("<span>" + project.name.replace('<', '&lt;') + "</span>")
                 .append("<span class='medium-screen-hidden'>" + project.description.replace('<', '&lt;') + "</span>")
