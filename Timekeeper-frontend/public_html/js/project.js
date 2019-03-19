@@ -72,10 +72,10 @@ function displayProjects(response) {
     disableAddButton(false);
     $.each(JSON.parse(response), function (id, project) {
         initializeFieldsForDisplay(project);
-
+        console.log(project);
         $(".table-body")
-                .append("<span>" + project.name + "</span>")
-                .append("<span class='medium-screen-hidden'>" + project.description + "</span>")
+                .append("<span>" + project.name.replace('<', '&lt;') + "</span>")
+                .append("<span class='medium-screen-hidden'>" + project.description.replace('<', '&lt;') + "</span>")
                 .append("<span class='small-screen-hidden'>" + project.status + "</span>")
                 .append("<span class='small-screen-hidden'>" + project.deadLine + "</span>")
                 .append("<span class='small-screen-hidden'>" + project.numberOfTasks + "</span>")
