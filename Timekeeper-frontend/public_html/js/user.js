@@ -1,5 +1,7 @@
 $(document).ready(function(){
    initializeEventHandlers();
+   
+   activateAccount();
 });
 
 function initializeEventHandlers(){
@@ -10,6 +12,33 @@ function initializeEventHandlers(){
     $("#btnRegister").on("click", function(){
         register();
     });
+}
+
+function activateAccount(){
+    var urlParams = new URLSearchParams(window.location.search);
+    var userName = urlParams.get("name");
+    var activationToken = urlParams.get("activationtoken");
+    
+    if(userName !== null && activationToken !== null){
+        var url = backendBaseUrl + httpRequestParamaters.backendUrlUser + "/activate";
+        var formData = {
+            "name": userName,
+            "activationToken": activationToken
+        };
+        
+        post(url, formData, activationSuccess, activationError);
+    }
+}
+
+function activationSuccess(){
+    var urlParams = new URLSearchParams(window.location.search);
+    var userName = urlParams.get("name");
+    $("#txtLoginUserName").val(userName);
+    snackbar("Account activated, you can login");
+}
+
+function activationError(response){
+    snackbar(JSON.parse(response).message, true);
 }
 
 function login(){
@@ -25,7 +54,6 @@ function login(){
 }
 
 function register(){
-    console.log("test");
     if($("#txtRegisterUserName").val() !== "" && $("#txtRegisterPassword").val() !== "" && $("#txtRegisterPasswordConfirm").val() !== "" && $("#txtRegisterEmail").val() !== ""){
         if($("#txtRegisterPassword").val() === $("#txtRegisterPasswordConfirm").val()){
             var url = backendBaseUrl + httpRequestParamaters.backendUrlUser + "/register";
@@ -45,7 +73,7 @@ function registerSucces(){
 }
 
 function registerError(response){
-    snackbar("Registration failed, please try again!")
+    snackbar("Registration failed, please try again!", true);
 }
 
 function loginSuccess(response){
