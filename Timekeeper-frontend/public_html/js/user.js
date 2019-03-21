@@ -56,15 +56,23 @@ function login(){
 function register(){
     if($("#txtRegisterUserName").val() !== "" && $("#txtRegisterPassword").val() !== "" && $("#txtRegisterPasswordConfirm").val() !== "" && $("#txtRegisterEmail").val() !== ""){
         if($("#txtRegisterPassword").val() === $("#txtRegisterPasswordConfirm").val()){
-            var url = backendBaseUrl + httpRequestParamaters.backendUrlUser + "/register";
-            var formData = {
-                "name": $("#txtRegisterUserName").val(),
-                "password": $("#txtRegisterPassword").val(),
-                "email": $("#txtRegisterEmail").val()
-            };
-            post(url, formData, registerSucces, registerError);
+            if(testEmailAddress($("#txtRegisterEmail").val())){
+                var url = backendBaseUrl + httpRequestParamaters.backendUrlUser + "/register";
+                var formData = {
+                    "name": $("#txtRegisterUserName").val(),
+                    "password": $("#txtRegisterPassword").val(),
+                    "email": $("#txtRegisterEmail").val()
+                };
+                post(url, formData, registerSucces, registerError);
+            } else {
+                snackbar("Invalid email", true);
+            }
         }
     }
+}
+
+function testEmailAddress(mail){
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail);
 }
 
 function registerSucces(){
@@ -73,7 +81,7 @@ function registerSucces(){
 }
 
 function registerError(response){
-    snackbar("Registration failed, please try again!", true);
+    snackbar(JSON.parse(response).message, true);
 }
 
 function loginSuccess(response){
@@ -82,7 +90,7 @@ function loginSuccess(response){
 }
 
 function loginError(response){
-    snackbar("Login failed, please try again!", true);
+    snackbar(JSON.parse(response).message, true);
 }
 
 
