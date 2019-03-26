@@ -8,7 +8,9 @@ var httpRequestParamaters = {
     "backendUrlStatuses": "task/_statuses",
     "backendUrlPriorities": "task/_priorities",
     "backendUrlUser": "user",
-    "credentials": "SexyBatmanSquad:SuckMyDick"
+    "credentials": "SexyBatmanSquad:SuckMyDick",
+    "backendUrlCaptcha": "captcha"
+
 }
 
 const backendBaseUrl = httpRequestParamaters.backendUrlDev;

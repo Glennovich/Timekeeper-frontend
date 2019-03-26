@@ -1,10 +1,14 @@
 .title-container{
     width: 450px;
     margin-left: 100px;
-    grid-template-columns: 140px 140px 140px;
-    grid-template-rows: 50px 25px 25px 25px auto;
+    grid-template-columns: 140px 240px 140px;
+    grid-template-rows: 50px 25px 25px 25px 25px auto;
 }
 .title-container h1{
     grid-column: 1 / 4;
     font-weight: normal;
+}
+
+.g-recaptcha{
+    grid-column: 2 / 3;
 }

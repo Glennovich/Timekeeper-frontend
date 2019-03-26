@@ -1,62 +1,66 @@
-$(document).ready(function(){
-   initializeEventHandlers();
-   
-   activateAccount();
+$(document).ready(function () {
+    initializeEventHandlers();
+
+    activateAccount();
 });
 
-function initializeEventHandlers(){
-    $("#btnLogin").on("click", function(){
+function initializeEventHandlers() {
+    $("#btnLogin").on("click", function () {
         login();
     });
-    
-    $("#btnRegister").on("click", function(){
+
+    $("#btnRegister").on("click", function () {
         register();
     });
 }
 
-function activateAccount(){
+function activateAccount() {
     var urlParams = new URLSearchParams(window.location.search);
     var userName = urlParams.get("name");
     var activationToken = urlParams.get("activationtoken");
-    
-    if(userName !== null && activationToken !== null){
+
+    if (userName !== null && activationToken !== null) {
         var url = backendBaseUrl + httpRequestParamaters.backendUrlUser + "/activate";
         var formData = {
             "name": userName,
             "activationToken": activationToken
         };
-        
+
         post(url, formData, activationSuccess, activationError);
     }
 }
 
-function activationSuccess(){
+function activationSuccess() {
     var urlParams = new URLSearchParams(window.location.search);
     var userName = urlParams.get("name");
     $("#txtLoginUserName").val(userName);
     snackbar("Account activated, you can login");
 }
 
-function activationError(response){
+function activationError(response) {
     snackbar(JSON.parse(response).message, true);
 }
 
-function login(){
-    if($("#txtLoginUserName").val() !== "" && $("#txtLoginPassword").val() !== ""){
+function login() {
+    if ($("#txtLoginUserName").val() !== "" && $("#txtLoginPassword").val() !== "") {
         var url = backendBaseUrl + httpRequestParamaters.backendUrlUser + "/login";
         var formData = {
             "name": $("#txtLoginUserName").val(),
             "password": $("#txtLoginPassword").val()
         };
-        
+
         post(url, formData, loginSuccess, loginError);
     }
 }
 
-function register(){
-    if($("#txtRegisterUserName").val() !== "" && $("#txtRegisterPassword").val() !== "" && $("#txtRegisterPasswordConfirm").val() !== "" && $("#txtRegisterEmail").val() !== ""){
-        if($("#txtRegisterPassword").val() === $("#txtRegisterPasswordConfirm").val()){
-            if(testEmailAddress($("#txtRegisterEmail").val())){
+function register() {
+    if ($("#txtRegisterUserName").val() !== ""
+            && $("#txtRegisterPassword").val() !== ""
+            && $("#txtRegisterPasswordConfirm").val() !== ""
+            && $("#txtRegisterEmail").val() !== "") {
+        if ($("#txtRegisterPassword").val() === $("#txtRegisterPasswordConfirm").val()) {
+             if(testEmailAddress($("#txtRegisterEmail").val())){
+           checkRecaptcha(() => {
                 var url = backendBaseUrl + httpRequestParamaters.backendUrlUser + "/register";
                 var formData = {
                     "name": $("#txtRegisterUserName").val(),
@@ -64,10 +68,15 @@ function register(){
                     "email": $("#txtRegisterEmail").val()
                 };
                 post(url, formData, registerSucces, registerError);
-            } else {
+            },
+            () => {
+                snackbar("Incorrect reCaptcha!", true);
+            });
+           } else {
                 snackbar("Invalid email", true);
             }
         }
+
     }
 }
 
@@ -75,7 +84,7 @@ function testEmailAddress(mail){
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail);
 }
 
-function registerSucces(){
+function registerSucces() {
     snackbar("Registration successfull, please activate your account!");
     window.location.href = 'login.html';
 }
@@ -84,7 +93,7 @@ function registerError(response){
     snackbar(JSON.parse(response).message, true);
 }
 
-function loginSuccess(response){
+function loginSuccess(response) {
     localStorage.setItem("token", JSON.parse(response).token);
     window.location.href = 'index.html';
 }

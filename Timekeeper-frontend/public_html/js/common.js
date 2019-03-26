@@ -169,3 +169,11 @@ function checkRequiredInputFields() {
     });
     return allFieldsAreFilledIn;
 }
+
+function checkRecaptcha(funcSucces, funcError) {
+    var formData = {
+        "captchaResponse": grecaptcha.getResponse()
+    };
+    var url = backendBaseUrl + httpRequestParamaters.backendUrlCaptcha;
+    post(url, formData, funcSucces, funcError);
+}
