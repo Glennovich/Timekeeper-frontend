@@ -69,9 +69,9 @@ function createCORSRequest(method, url) {
 function setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError) {
     xhr.onload = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
-            if(xhr.status == 400){
+            if (xhr.status == 400) {
                 turnBusyIndicatorOff();
-                if(functionOnError)
+                if (functionOnError)
                     functionOnError(xhr.response);
                 return;
             }
@@ -79,21 +79,21 @@ function setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError) {
                 window.location.href = '401.html';
                 return;
             }
-            if(xhr.status == 403){
+            if (xhr.status == 403) {
                 turnBusyIndicatorOff();
-                if(functionOnError)
+                if (functionOnError)
                     functionOnError(xhr.response);
                 return;
             }
-            if(xhr.status == 404){
+            if (xhr.status == 404) {
                 turnBusyIndicatorOff();
-                if(functionOnError)
+                if (functionOnError)
                     functionOnError(xhr.response);
                 return;
             }
-            if(xhr.status == 409){
+            if (xhr.status == 409) {
                 turnBusyIndicatorOff();
-                if(functionOnError)
+                if (functionOnError)
                     functionOnError(xhr.response);
                 return;
             }
@@ -107,9 +107,9 @@ function setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError) {
 
     xhr.onerror = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
-            if(xhr.status == 400){
+            if (xhr.status == 400) {
                 turnBusyIndicatorOff();
-                if(functionOnError)
+                if (functionOnError)
                     functionOnError(xhr.response);
                 return;
             }
@@ -117,27 +117,28 @@ function setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError) {
                 window.location.href = '401.html';
                 return;
             }
-            if(xhr.status == 403){
+            if (xhr.status == 403) {
                 turnBusyIndicatorOff();
-                if(functionOnError)
+                if (functionOnError)
                     functionOnError(xhr.response);
                 return;
             }
-            if(xhr.status == 404){
+            if (xhr.status == 404) {
                 turnBusyIndicatorOff();
-                if(functionOnError)
+                if (functionOnError)
                     functionOnError(xhr.response);
                 return;
             }
-            if(xhr.status == 409){
+            if (xhr.status == 409) {
                 turnBusyIndicatorOff();
-                if(functionOnError)
+                if (functionOnError)
                     functionOnError(xhr.response);
                 return;
             }
             try {
                 turnBusyIndicatorOff();
-                if (xhr.status == 0) {
+                if (xhr.status == 0 && connectionAlive) {
+                    connectionAlive = false;
                     connectionLostProcedure();
                 } else {
                     if (functionOnError)
@@ -146,31 +147,30 @@ function setErrorAndSuccessFunctions(xhr, functionOnSucces, functionOnError) {
             } catch (e) {
             }
         }
-
     }
 }
 
 function connectionLostProcedure() {
-    if (connectionAlive) {
-        $.each($(".title-container *"), (i, el) => {
-            disableElement(el, true);
-        });
-        snackbar("A connection error occured, please try again later!", true);
-    }
-    connectionAlive = false;
-    setTimeout(reconnect, 10000);
+    $.each($(".title-container *"), (i, el) => {
+        disableElement(el, true);
+    });
+    snackbar("A connection error occured, please try again later!", true);
+    reconnect();
 }
 
 function reconnect() {
-    get((backendBaseUrl + "live"),
-            function () {
-                connectionAlive = true;
-                $.each($(".title-container *"), (i, el) => {
-                    disableElement(el, false);
-                });
-
-                snackbar("Connection restored");
-                initializeContent();
-            }, null, true);
-
+    var xhr = createCORSRequest('GET', backendBaseUrl + "live");
+    xhr.onload = function () {
+        $.each($(".title-container *"), (i, el) => {
+            disableElement(el, false);
+        });
+        snackbar("Connection restored");
+        connectionAlive = true;
+        initializeContent();
+    }
+    xhr.onerror = function () {
+        setTimeout(reconnect, 2000);
+    }
+    xhr.setRequestHeader("token", localStorage.getItem("token"));
+    xhr.send();
 }
