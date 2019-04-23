@@ -65,7 +65,7 @@ function getProjectsError() {
 }
 
 function disableAddButton(disable) {
-    disableElement($("#btnAddProject"), disable)
+    disableElement($("#btnAddProject"), disable);
 }
 
 function displayProjects(response) {
